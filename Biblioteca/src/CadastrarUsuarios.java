@@ -1,7 +1,9 @@
 
 import java.awt.Dimension;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+//import javax.swing.JOptionPane;
+//import javax.swing.table.DefaultTableModel;
+import model.bean.Usuarios;
+import model.dao.UsuariosDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CadastrarUsuarios extends javax.swing.JInternalFrame {
 
-    int idUser = 1;
+    //int idUser = 1;
     /**
      * Creates new form CadastrarUsuarios
      */
@@ -22,7 +24,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         initComponents();
         setClosable(true);
         selecionarSerie.setEnabled(false);
-        idUsuario.setText(Integer.toString(idUser));
+    //    idUsuario.setText(Integer.toString(idUser));
     }
 
     public void setPosicao() {
@@ -323,7 +325,20 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
 
     private void cadastrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarUsuarioActionPerformed
         
-        if (nomeUsuario.getText().isBlank()) {
+        Usuarios users = new Usuarios();
+        UsuariosDAO dao = new UsuariosDAO();
+        
+        users.setNome(nomeUsuario.getText());
+        users.setDataNasc(dataNascimento.getText());
+        users.setTelefone(telefone.getText());
+        users.setSexo(selecionarSexo.getSelectedItem().toString());
+        users.setTipo(selecionarTipo.getSelectedItem().toString());
+        users.setSerie(selecionarSerie.getSelectedItem().toString());
+        users.setEndereco(enderecoUsuario.getText());
+        
+        dao.create(users);
+        
+        /*if (nomeUsuario.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
             DefaultTableModel tblUsuarios = (DefaultTableModel) tabelaUsuarios.getModel();
@@ -339,7 +354,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             selecionarSerie.setSelectedItem("Selecione");
             selecionarSerie.setEnabled(false);
             JOptionPane.showMessageDialog(null, "Usuário Cadastrado com Sucesso!");
-        }
+        }*/
     }//GEN-LAST:event_cadastrarUsuarioActionPerformed
 
     private void selecionarTipoComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_selecionarTipoComponentHidden

@@ -1,33 +1,35 @@
 
 import java.awt.Dimension;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+//import javax.swing.JOptionPane;
+//import javax.swing.table.DefaultTableModel;
+import model.bean.Acervo;
+import model.dao.AcervoDAO;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
  */
 public class CadastroExemplar extends javax.swing.JInternalFrame {
 
-    int idExe = 1;
+    //int idExe = 1;
     /**
      * Creates new form CadastroExemplar
      */
     public CadastroExemplar() {
         initComponents();
         setClosable(true);
-        idExemplar.setText(Integer.toString(idExe));
+        //idExemplar.setText(Integer.toString(idExe));
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -253,7 +255,20 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
     private void cadastrarExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarExemplarActionPerformed
 
-        if ((titulo.getText().isBlank()) || (autor.getText().isBlank()) || (qtdExemplares.getText().isBlank()) || (numChamada.getText().isBlank())) {
+        Acervo acervo = new Acervo();
+        AcervoDAO dao = new AcervoDAO();
+
+        acervo.setTitulo(titulo.getText());
+        acervo.setAutor(autor.getText());
+        acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
+        acervo.setVolume(Integer.parseInt(volume.getText()));
+        acervo.setEditora(editora.getText());
+        acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
+        acervo.setChamada(numChamada.getText());
+
+        dao.create(acervo);
+
+        /*if ((titulo.getText().isBlank()) || (autor.getText().isBlank()) || (qtdExemplares.getText().isBlank()) || (numChamada.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
             DefaultTableModel tblExemplares = (DefaultTableModel) tabelaExemplares.getModel();
@@ -269,7 +284,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             idExe = idExe + 1;
             idExemplar.setText(Integer.toString(idExe));
             JOptionPane.showMessageDialog(null, "Exemplar Cadastrado com Sucesso!");
-        }
+        }*/
     }//GEN-LAST:event_cadastrarExemplarActionPerformed
 
 
@@ -297,5 +312,4 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     private javax.swing.JTextField titulo;
     private javax.swing.JTextField volume;
     // End of variables declaration//GEN-END:variables
-
 }
