@@ -10,12 +10,12 @@ import java.awt.Dimension;
  *
  * @author lyand
  */
-public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
+public class ConsultarDevolucao extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ConsultarEmprestimo
      */
-    public ConsultarEmprestimo() {
+    public ConsultarDevolucao() {
         initComponents();
         setClosable(true);
     }
@@ -35,59 +35,59 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        cancelEmp = new javax.swing.JButton();
-        lblLupaEmp = new javax.swing.JLabel();
-        pesqEmprestimo = new javax.swing.JTextField();
-        btnPesqEmprestimo = new javax.swing.JButton();
+        cancelDev = new javax.swing.JButton();
+        lblLupaDev = new javax.swing.JLabel();
+        pesqDevolucao = new javax.swing.JTextField();
+        btnPesqDevolucao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblConsultaEmp = new javax.swing.JTable();
-        editEmp = new javax.swing.JButton();
-        excEmp = new javax.swing.JButton();
+        tblConsultaDev = new javax.swing.JTable();
+        editDev = new javax.swing.JButton();
+        excDev = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setText("Consultar Empréstimos");
+        jLabel1.setText("Consultar Devolução");
 
-        cancelEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cancelEmp.setText("Cancelar");
-        cancelEmp.addActionListener(new java.awt.event.ActionListener() {
+        cancelDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cancelDev.setText("Cancelar");
+        cancelDev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelEmpActionPerformed(evt);
+                cancelDevActionPerformed(evt);
             }
         });
 
-        lblLupaEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblLupaEmp.setText("Lupa");
+        lblLupaDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblLupaDev.setText("Lupa");
 
-        pesqEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        pesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        btnPesqEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnPesqEmprestimo.setText("Pesquisar");
+        btnPesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnPesqDevolucao.setText("Pesquisar");
 
-        tblConsultaEmp.setModel(new javax.swing.table.DefaultTableModel(
+        tblConsultaDev.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Devolução"
+                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblConsultaEmp);
+        jScrollPane1.setViewportView(tblConsultaDev);
 
-        editEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        editEmp.setText("Editar");
+        editDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        editDev.setText("Editar");
 
-        excEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        excEmp.setText("Excluir");
+        excDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        excDev.setText("Excluir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,11 +95,11 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 188, Short.MAX_VALUE)
-                .addComponent(editEmp)
+                .addComponent(editDev)
                 .addGap(57, 57, 57)
-                .addComponent(excEmp)
+                .addComponent(excDev)
                 .addGap(58, 58, 58)
-                .addComponent(cancelEmp)
+                .addComponent(cancelDev)
                 .addGap(167, 167, 167))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -109,11 +109,11 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblLupaEmp)
+                        .addComponent(lblLupaDev)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPesqEmprestimo))
+                        .addComponent(btnPesqDevolucao))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(269, 269, 269)
                         .addComponent(jLabel1)))
@@ -126,36 +126,36 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLupaEmp)
-                    .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesqEmprestimo))
+                    .addComponent(lblLupaDev)
+                    .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPesqDevolucao))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelEmp)
-                    .addComponent(editEmp)
-                    .addComponent(excEmp))
+                    .addComponent(cancelDev)
+                    .addComponent(editDev)
+                    .addComponent(excDev))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cancelEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmpActionPerformed
+    private void cancelDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelDevActionPerformed
         doDefaultCloseAction();
-    }//GEN-LAST:event_cancelEmpActionPerformed
+    }//GEN-LAST:event_cancelDevActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnPesqEmprestimo;
-    private javax.swing.JButton cancelEmp;
-    private javax.swing.JButton editEmp;
-    private javax.swing.JButton excEmp;
+    private javax.swing.JButton btnPesqDevolucao;
+    private javax.swing.JButton cancelDev;
+    private javax.swing.JButton editDev;
+    private javax.swing.JButton excDev;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblLupaEmp;
-    private javax.swing.JTextField pesqEmprestimo;
-    private javax.swing.JTable tblConsultaEmp;
+    private javax.swing.JLabel lblLupaDev;
+    private javax.swing.JTextField pesqDevolucao;
+    private javax.swing.JTable tblConsultaDev;
     // End of variables declaration//GEN-END:variables
 }

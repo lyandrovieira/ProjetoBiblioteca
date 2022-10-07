@@ -39,6 +39,7 @@ public class Principal extends javax.swing.JFrame {
         subMenuEmp = new javax.swing.JMenuItem();
         subMenuDev = new javax.swing.JMenuItem();
         subMenuConsultExemp = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menuSobre = new javax.swing.JMenu();
         subMenuSobre = new javax.swing.JMenuItem();
 
@@ -131,6 +132,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         menuEmpDev.add(subMenuConsultExemp);
+
+        jMenuItem1.setText("Consultar Devolução");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuEmpDev.add(jMenuItem1);
 
         jMenuBar1.add(menuEmpDev);
 
@@ -241,6 +250,13 @@ public class Principal extends javax.swing.JFrame {
         sobre.setVisible(true);
     }//GEN-LAST:event_subMenuSobreActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        ConsultarDevolucao consultdev = new ConsultarDevolucao();
+        desktoppanel.add(consultdev);
+        consultdev.setPosicao();
+        consultdev.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -279,6 +295,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktoppanel;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenu menuAcervo;
     private javax.swing.JMenu menuEmpDev;
     private javax.swing.JMenu menuSobre;

@@ -4,10 +4,13 @@
  */
 package model.dao;
 
+import java.sql.ResultSet;
 import connection.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import model.bean.Acervo;
 
@@ -16,14 +19,14 @@ import model.bean.Acervo;
  * @author lyand
  */
 public class AcervoDAO {
-    
+
     public void create(Acervo a) {
-    
+
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
-        
+
         try {
-            
+
             stmt = con.prepareStatement("INSERT INTO tbl_books (titulo,autor,exemplar,volume,editora,ano_publi,chamada)VALUES(?,?,?,?,?,?,?)");
             stmt.setString(1, a.getTitulo());
             stmt.setString(2, a.getAutor());
@@ -32,17 +35,52 @@ public class AcervoDAO {
             stmt.setString(5, a.getEditora());
             stmt.setInt(6, a.getAno_publi());
             stmt.setString(7, a.getChamada());
-            
+
             stmt.executeUpdate();
-            
+
             JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
-            
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar:" + ex);
-        }finally {
+        } finally {
             ConnectionFactory.closeConnection(con, stmt);
         }
-               
+
     }
-    
+
+    public List<Acervo> read() {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        List<Acervo> acervoExemp = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_books");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Acervo acervo = new Acervo();
+                
+                acervo.setId(rs.getInt("id"));
+                acervo.setTitulo(rs.getString("titulo"));
+                acervo.setAutor(rs.getString("autor"));
+                acervo.setExemplar(rs.getInt("exemplar"));
+                acervo.setVolume(rs.getInt("volume"));
+                acervo.setEditora(rs.getString("editora"));
+                acervo.setAno_publi(rs.getInt("ano_publi"));
+                acervo.setChamada(rs.getString("chamada"));
+                acervoExemp.add(acervo);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        }finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        
+        return acervoExemp;
+    }
+
 }

@@ -15,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
  * @author lyand
  */
 public class Emprestimo extends javax.swing.JInternalFrame {
-
-    int idEmp = 1;
     
     /**
      * Creates new form Emprestimo
@@ -26,7 +24,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         initComponents();
         setDate();
         setClosable(true);
-        idEmprestimo.setText(Integer.toString(idEmp));
         
     }
 
@@ -238,8 +235,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
             tblEmprestimo.addRow(dadosEmprestimo);
             numChamada.setText(null);
             usuarioEmprestimo.setText(null);
-            idEmp = idEmp + 1;
-            idEmprestimo.setText(Integer.toString(idEmp));
             JOptionPane.showMessageDialog(null, "O Empréstimo foi realizado com sucesso!");
         }
     }//GEN-LAST:event_confirmarEmprestimoActionPerformed

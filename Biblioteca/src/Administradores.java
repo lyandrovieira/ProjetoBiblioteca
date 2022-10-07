@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.bean.Admins;
+import model.dao.AdminsDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -213,14 +215,21 @@ public class Administradores extends javax.swing.JInternalFrame {
         if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else if (Arrays.equals(senha, confSenha)) {
-            DefaultTableModel tblAdmin = (DefaultTableModel) tabelaAdmin.getModel();
-            Object[] dadosAdmin = {usuarioAdmin.getText(), selecionarOcupacao.getSelectedItem()};
-            tblAdmin.addRow(dadosAdmin);
+            
+            Admins admin = new Admins();
+            AdminsDAO dao = new AdminsDAO();
+            
+            admin.setNome(usuarioAdmin.getText());
+            admin.setSenha(senhaAdmin.getText());
+            admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
+            
+            dao.create(admin);
+            
             usuarioAdmin.setText(null);
             senhaAdmin.setText(null);
             confirmarSenha.setText(null);
             selecionarOcupacao.setSelectedItem("Selecione");
-            JOptionPane.showMessageDialog(null, "Administrador cadastrado com sucesso!");
+
         } else {
             JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
         }

@@ -1,5 +1,8 @@
 
 import java.awt.Dimension;
+import javax.swing.table.DefaultTableModel;
+import model.bean.Usuarios;
+import model.dao.UsuariosDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,12 +20,32 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
      */
     public UsuariosCadastrados() {
         initComponents();
+        readJTable();
         setClosable(true);
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void readJTable() {       
+        DefaultTableModel tblUsers = (DefaultTableModel) tblConsultUser.getModel();
+        tblUsers.setNumRows(0);
+        
+        UsuariosDAO u_dao = new UsuariosDAO();
+        for(Usuarios u: u_dao.read()) {
+            tblUsers.addRow(new Object[]{
+                u.getId(),
+                u.getNome(),
+                u.getDataNasc(),
+                u.getTelefone(),
+                u.getSexo(),
+                u.getTipo(),
+                u.getSerie(),
+                u.getEndereco()
+            });
+        }
     }
     
     /**
@@ -42,7 +65,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblConsultUser = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -71,7 +94,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Lupa");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblConsultUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -87,7 +110,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblConsultUser);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,7 +178,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblConsultUser;
     // End of variables declaration//GEN-END:variables
 }

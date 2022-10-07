@@ -1,5 +1,8 @@
 
 import java.awt.Dimension;
+import javax.swing.table.DefaultTableModel;
+import model.bean.Acervo;
+import model.dao.AcervoDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,17 +20,34 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
      */
     public ConsultarAcervo() {
         initComponents();
-        /*setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
-        bi.setNorthPane(null);*/
-        setClosable(true); // Botão fechar.
-        //setIconifiable(true); // Botão minimizar.
-        //setMaximizable(true); // Botão maximizar.
+        readJTable();
+        setClosable(true);
+
     }
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
+    
+    public void readJTable() {       
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tabelaConsulExemplares.getModel();
+        tblConsultExemp.setNumRows(0);
+        
+        AcervoDAO a_dao = new AcervoDAO();
+        for(Acervo a: a_dao.read()) {
+            tblConsultExemp.addRow(new Object[]{
+                a.getId(),
+                a.getTitulo(),
+                a.getAutor(),
+                a.getExemplar(),
+                a.getVolume(),
+                a.getEditora(),
+                a.getAno_publi(),
+                a.getChamada()
+            });
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,7 +65,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaConsulExemplares = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -74,7 +94,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaConsulExemplares.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -90,7 +110,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaConsulExemplares);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -161,7 +181,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tabelaConsulExemplares;
     // End of variables declaration//GEN-END:variables
 }

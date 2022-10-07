@@ -1,7 +1,6 @@
-
 import java.awt.Dimension;
-//import javax.swing.JOptionPane;
-//import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.bean.Usuarios;
 import model.dao.UsuariosDAO;
 
@@ -9,27 +8,44 @@ import model.dao.UsuariosDAO;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
  */
 public class CadastrarUsuarios extends javax.swing.JInternalFrame {
 
-    //int idUser = 1;
     /**
      * Creates new form CadastrarUsuarios
      */
     public CadastrarUsuarios() {
         initComponents();
-        setClosable(true);
+        readJTable();
         selecionarSerie.setEnabled(false);
-    //    idUsuario.setText(Integer.toString(idUser));
+        setClosable(true); 
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+
+    public void readJTable() {       
+        DefaultTableModel tblUsers = (DefaultTableModel) tabelaUsuarios.getModel();
+        tblUsers.setNumRows(0);
+        
+        UsuariosDAO u_dao = new UsuariosDAO();
+        for(Usuarios u: u_dao.read()) {
+            tblUsers.addRow(new Object[]{
+                u.getId(),
+                u.getNome(),
+                u.getDataNasc(),
+                u.getTelefone(),
+                u.getSexo(),
+                u.getTipo(),
+                u.getSerie(),
+                u.getEndereco()
+            });
+        }
     }
     
     /**
@@ -324,37 +340,34 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelarUsuarioActionPerformed
 
     private void cadastrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarUsuarioActionPerformed
-        
-        Usuarios users = new Usuarios();
-        UsuariosDAO dao = new UsuariosDAO();
-        
-        users.setNome(nomeUsuario.getText());
-        users.setDataNasc(dataNascimento.getText());
-        users.setTelefone(telefone.getText());
-        users.setSexo(selecionarSexo.getSelectedItem().toString());
-        users.setTipo(selecionarTipo.getSelectedItem().toString());
-        users.setSerie(selecionarSerie.getSelectedItem().toString());
-        users.setEndereco(enderecoUsuario.getText());
-        
-        dao.create(users);
-        
-        /*if (nomeUsuario.getText().isBlank()) {
+
+        if (nomeUsuario.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            DefaultTableModel tblUsuarios = (DefaultTableModel) tabelaUsuarios.getModel();
-            Object[] dadosUsuarios = {idUsuario.getText(), nomeUsuario.getText(), dataNascimento.getText(), telefone.getText(), selecionarTipo.getSelectedItem(),selecionarSerie.getSelectedItem(), enderecoUsuario.getText()};
-            tblUsuarios.addRow(dadosUsuarios);
+            Usuarios users = new Usuarios();
+            UsuariosDAO dao = new UsuariosDAO();
+
+            users.setNome(nomeUsuario.getText());
+            users.setDataNasc(dataNascimento.getText());
+            users.setTelefone(telefone.getText());
+            users.setSexo(selecionarSexo.getSelectedItem().toString());
+            users.setTipo(selecionarTipo.getSelectedItem().toString());
+            users.setSerie(selecionarSerie.getSelectedItem().toString());
+            users.setEndereco(enderecoUsuario.getText());
+
+            dao.create(users);
+
             nomeUsuario.setText(null);
             dataNascimento.setText(null);
             telefone.setText(null);
             enderecoUsuario.setText(null);
-            idUser = idUser + 1;
-            idUsuario.setText(Integer.toString(idUser));
             selecionarTipo.setSelectedItem("Selecione");
             selecionarSerie.setSelectedItem("Selecione");
             selecionarSerie.setEnabled(false);
-            JOptionPane.showMessageDialog(null, "Usuário Cadastrado com Sucesso!");
-        }*/
+            
+            readJTable();
+        }
+
     }//GEN-LAST:event_cadastrarUsuarioActionPerformed
 
     private void selecionarTipoComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_selecionarTipoComponentHidden
@@ -367,7 +380,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             selecionarSerie.setEnabled(false);
         } else if (selecionarTipo.getSelectedItem() == "Estudante") {
             selecionarSerie.setSelectedItem("Selecione");
-            selecionarSerie.setEnabled(true);       
+            selecionarSerie.setEnabled(true);
         } else {
             selecionarSerie.setSelectedItem("Não se Aplica");
             selecionarSerie.setEnabled(false);
