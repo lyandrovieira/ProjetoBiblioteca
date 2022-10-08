@@ -1,5 +1,6 @@
 
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Usuarios;
 import model.dao.UsuariosDAO;
@@ -59,13 +60,12 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        editarUser = new javax.swing.JButton();
-        excluirUser = new javax.swing.JButton();
         cancelarUser = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultUser = new javax.swing.JTable();
+        excluirUsuario = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -73,12 +73,6 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setText("Pesquisar");
-
-        editarUser.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        editarUser.setText("Editar");
-
-        excluirUser.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        excluirUser.setText("Excluir");
 
         cancelarUser.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cancelarUser.setText("Cancelar");
@@ -99,11 +93,11 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nome", "Data Nascimento", "Telefone", "TIpo", "Série", "Endereço"
+                "ID", "Nome", "Data Nascimento", "Telefone", "Sexo", "TIpo", "Série", "Endereço"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -112,35 +106,43 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblConsultUser);
 
+        excluirUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        excluirUsuario.setText("Excluir");
+        excluirUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excluirUsuarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 185, Short.MAX_VALUE)
-                .addComponent(editarUser)
-                .addGap(57, 57, 57)
-                .addComponent(excluirUser)
-                .addGap(52, 52, 52)
-                .addComponent(cancelarUser)
-                .addGap(176, 176, 176))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(272, 272, 272)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 203, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(272, 272, 272)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(244, 244, 244)
+                .addComponent(excluirUsuario)
+                .addGap(39, 39, 39)
+                .addComponent(cancelarUser)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,9 +158,8 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(editarUser)
-                    .addComponent(excluirUser)
-                    .addComponent(cancelarUser))
+                    .addComponent(cancelarUser)
+                    .addComponent(excluirUsuario))
                 .addContainerGap())
         );
 
@@ -169,11 +170,25 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelarUserActionPerformed
 
+    private void excluirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirUsuarioActionPerformed
+        if (tblConsultUser.getSelectedRow() != -1) {
+            Usuarios users = new Usuarios();
+            UsuariosDAO dao = new UsuariosDAO();
+
+            users.setId((int) tblConsultUser.getValueAt(tblConsultUser.getSelectedRow(), 0));
+
+            dao.delete(users);
+
+            readJTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um usuário para excluir.");
+        }
+    }//GEN-LAST:event_excluirUsuarioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarUser;
-    private javax.swing.JButton editarUser;
-    private javax.swing.JButton excluirUser;
+    private javax.swing.JButton excluirUsuario;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

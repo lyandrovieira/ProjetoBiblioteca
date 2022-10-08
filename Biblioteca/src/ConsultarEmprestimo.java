@@ -1,5 +1,8 @@
 
 import java.awt.Dimension;
+import javax.swing.table.DefaultTableModel;
+import model.bean.Emprestimos;
+import model.dao.EmprestimoDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,12 +20,29 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
      */
     public ConsultarEmprestimo() {
         initComponents();
+        readJTable();
         setClosable(true);
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void readJTable() {       
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
+        tblConsultExemp.setNumRows(0);
+        
+        EmprestimoDAO emp_dao = new EmprestimoDAO();
+        for(Emprestimos emps: emp_dao.read()) {
+            tblConsultExemp.addRow(new Object[]{
+                emps.getId(),
+                emps.getNumChamada(),
+                emps.getUsuario(),
+                emps.getDataEmp(),
+                emps.getDataDev()
+            });
+        }
     }
     
     /**
@@ -41,8 +61,6 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         btnPesqEmprestimo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultaEmp = new javax.swing.JTable();
-        editEmp = new javax.swing.JButton();
-        excEmp = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -70,11 +88,11 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Devolução"
+                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -83,41 +101,33 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblConsultaEmp);
 
-        editEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        editEmp.setText("Editar");
-
-        excEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        excEmp.setText("Excluir");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 188, Short.MAX_VALUE)
-                .addComponent(editEmp)
-                .addGap(57, 57, 57)
-                .addComponent(excEmp)
-                .addGap(58, 58, 58)
-                .addComponent(cancelEmp)
-                .addGap(167, 167, 167))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGap(295, 295, 295)
+                .addComponent(cancelEmp)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblLupaEmp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPesqEmprestimo))
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(269, 269, 269)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblLupaEmp)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPesqEmprestimo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(269, 269, 269)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 203, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,10 +142,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelEmp)
-                    .addComponent(editEmp)
-                    .addComponent(excEmp))
+                .addComponent(cancelEmp)
                 .addContainerGap())
         );
 
@@ -150,8 +157,6 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPesqEmprestimo;
     private javax.swing.JButton cancelEmp;
-    private javax.swing.JButton editEmp;
-    private javax.swing.JButton excEmp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLupaEmp;

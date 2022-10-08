@@ -1,3 +1,4 @@
+
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,7 +22,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         initComponents();
         readJTable();
         selecionarSerie.setEnabled(false);
-        setClosable(true); 
+        setClosable(true);
     }
 
     public void setPosicao() {
@@ -29,12 +30,12 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
 
-    public void readJTable() {       
+    public void readJTable() {
         DefaultTableModel tblUsers = (DefaultTableModel) tabelaUsuarios.getModel();
         tblUsers.setNumRows(0);
-        
+
         UsuariosDAO u_dao = new UsuariosDAO();
-        for(Usuarios u: u_dao.read()) {
+        for (Usuarios u : u_dao.read()) {
             tblUsers.addRow(new Object[]{
                 u.getId(),
                 u.getNome(),
@@ -47,7 +48,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,8 +60,6 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        idUsuario = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         nomeUsuario = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -81,16 +80,12 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         selecionarSexo = new javax.swing.JComboBox<>();
+        atualizarUser = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Cadastrar Usuários");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("ID");
-
-        idUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Nome *");
@@ -171,6 +166,16 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaUsuariosMouseClicked(evt);
+            }
+        });
+        tabelaUsuarios.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tabelaUsuariosKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaUsuarios);
 
         selecionarTipo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -213,6 +218,14 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
+        atualizarUser.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        atualizarUser.setText("Atualizar");
+        atualizarUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizarUserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -236,7 +249,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(0, 0, 0)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -244,6 +257,13 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                         .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(enderecoUsuario)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(dataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(selecionarSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(70, 70, 70))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(selecionarTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(24, 24, 24)
@@ -251,19 +271,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                                 .addGap(31, 31, 31)
                                 .addComponent(selecionarSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(dataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel10)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(selecionarSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(nomeUsuario))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(idUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(nomeUsuario))))
                 .addGap(12, 12, 12))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,11 +279,13 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                         .addGap(241, 241, 241)
                         .addComponent(jLabel7))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(226, 226, 226)
+                        .addGap(167, 167, 167)
                         .addComponent(cadastrarUsuario)
-                        .addGap(58, 58, 58)
+                        .addGap(42, 42, 42)
+                        .addComponent(atualizarUser)
+                        .addGap(46, 46, 46)
                         .addComponent(cancelarUsuario)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,12 +295,9 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(nomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
-                    .addComponent(idUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(nomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -318,7 +325,8 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelarUsuario)
-                            .addComponent(cadastrarUsuario))
+                            .addComponent(cadastrarUsuario)
+                            .addComponent(atualizarUser))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())))
@@ -364,7 +372,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             selecionarTipo.setSelectedItem("Selecione");
             selecionarSerie.setSelectedItem("Selecione");
             selecionarSerie.setEnabled(false);
-            
+
             readJTable();
         }
 
@@ -399,17 +407,74 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_selecionarSexoActionPerformed
 
+    private void atualizarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarUserActionPerformed
+        if (tabelaUsuarios.getSelectedRow() != -1) {
+            Usuarios users = new Usuarios();
+            UsuariosDAO dao = new UsuariosDAO();
+
+            users.setNome(nomeUsuario.getText());
+            users.setDataNasc(dataNascimento.getText());
+            users.setTelefone(telefone.getText());
+            users.setSexo(selecionarSexo.getSelectedItem().toString());
+            users.setTipo(selecionarTipo.getSelectedItem().toString());
+            users.setSerie(selecionarSerie.getSelectedItem().toString());
+            users.setEndereco(enderecoUsuario.getText());
+            users.setId((int) tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 0));
+
+            dao.update(users);
+
+            nomeUsuario.setText(null);
+            dataNascimento.setText(null);
+            telefone.setText(null);
+            enderecoUsuario.setText(null);
+            selecionarTipo.setSelectedItem("Selecione");
+            selecionarSerie.setSelectedItem("Selecione");
+            selecionarSerie.setEnabled(false);
+
+            readJTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um usuário para atualizar.");
+        }
+    }//GEN-LAST:event_atualizarUserActionPerformed
+
+    private void tabelaUsuariosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaUsuariosKeyReleased
+        if (tabelaUsuarios.getSelectedRow() != -1) {
+
+            nomeUsuario.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 1).toString());
+            dataNascimento.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 2).toString());
+            telefone.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 3).toString());
+            selecionarSexo.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 4).toString());
+            selecionarTipo.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 5).toString());
+            selecionarSerie.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 6).toString());
+            enderecoUsuario.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 7).toString());
+
+        }
+    }//GEN-LAST:event_tabelaUsuariosKeyReleased
+
+    private void tabelaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaUsuariosMouseClicked
+        if (tabelaUsuarios.getSelectedRow() != -1) {
+
+            nomeUsuario.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 1).toString());
+            dataNascimento.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 2).toString());
+            telefone.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 3).toString());
+            selecionarSexo.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 4).toString());
+            selecionarTipo.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 5).toString());
+            selecionarSerie.setSelectedItem(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 6).toString());
+            enderecoUsuario.setText(tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 7).toString());
+
+        }
+    }//GEN-LAST:event_tabelaUsuariosMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton atualizarUser;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cadastrarUsuario;
     private javax.swing.JButton cancelarUsuario;
     private javax.swing.JFormattedTextField dataNascimento;
     private javax.swing.JTextField enderecoUsuario;
-    private javax.swing.JLabel idUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

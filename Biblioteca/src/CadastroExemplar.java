@@ -1,8 +1,6 @@
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-//import javax.swing.JOptionPane;
-//import javax.swing.table.DefaultTableModel;
 import model.bean.Acervo;
 import model.dao.AcervoDAO;
 
@@ -29,13 +27,13 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
-    public void readJTable() {       
+
+    public void readJTable() {
         DefaultTableModel tblExemp = (DefaultTableModel) tabelaExemplares.getModel();
         tblExemp.setNumRows(0);
-        
+
         AcervoDAO a_dao = new AcervoDAO();
-        for(Acervo a: a_dao.read()) {
+        for (Acervo a : a_dao.read()) {
             tblExemp.addRow(new Object[]{
                 a.getId(),
                 a.getTitulo(),
@@ -59,7 +57,6 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -67,7 +64,6 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        idExemplar = new javax.swing.JLabel();
         cadastrarExemplar = new javax.swing.JButton();
         cancelarCadastroExemplar = new javax.swing.JButton();
         autor = new javax.swing.JTextField();
@@ -80,14 +76,12 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         tabelaExemplares = new javax.swing.JTable();
         titulo = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        atualizaExemplar = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(708, 600));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Cadastrar Exemplares");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("ID");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Autor *");
@@ -109,8 +103,6 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("Nº de chamada *");
-
-        idExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         cadastrarExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cadastrarExemplar.setText("Cadastrar");
@@ -163,6 +155,16 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaExemplares.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaExemplaresMouseClicked(evt);
+            }
+        });
+        tabelaExemplares.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tabelaExemplaresKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaExemplares);
 
         titulo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -171,6 +173,19 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         jLabel10.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 0, 0));
         jLabel10.setText("Campos marcados com  *  são obrigatórios");
+
+        atualizaExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        atualizaExemplar.setText("Editar");
+        atualizaExemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizaExemplarActionPerformed(evt);
+            }
+        });
+        atualizaExemplar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                atualizaExemplarKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,6 +196,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
@@ -189,13 +205,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                             .addComponent(jLabel6)
                                             .addComponent(jLabel3))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(idExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,15 +223,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel5)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(qtdExemplares, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(jLabel4)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(193, 193, 193)
-                                        .addComponent(cadastrarExemplar)
-                                        .addGap(74, 74, 74)
-                                        .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(15, 15, 15))
-                            .addComponent(jScrollPane1)))
+                                                .addComponent(qtdExemplares, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel4))
+                                .addGap(0, 15, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -232,6 +237,14 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel1)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(170, 170, 170)
+                .addComponent(cadastrarExemplar)
+                .addGap(36, 36, 36)
+                .addComponent(atualizaExemplar)
+                .addGap(37, 37, 37)
+                .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,11 +253,9 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(idExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -267,7 +278,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastrarExemplar)
-                    .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizaExemplar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -304,23 +316,84 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             editora.setText(null);
             anoPublicacao.setText(null);
             numChamada.setText(null);
-            
+
             readJTable();
         }
 
     }//GEN-LAST:event_cadastrarExemplarActionPerformed
 
+    private void atualizaExemplarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_atualizaExemplarKeyReleased
+
+    }//GEN-LAST:event_atualizaExemplarKeyReleased
+
+    private void atualizaExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizaExemplarActionPerformed
+        if (tabelaExemplares.getSelectedRow() != -1) {
+            Acervo acervo = new Acervo();
+            AcervoDAO dao = new AcervoDAO();
+
+            acervo.setTitulo(titulo.getText());
+            acervo.setAutor(autor.getText());
+            acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
+            acervo.setVolume(Integer.parseInt(volume.getText()));
+            acervo.setEditora(editora.getText());
+            acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
+            acervo.setChamada(numChamada.getText());
+            acervo.setId((int) tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 0));
+
+            dao.update(acervo);
+
+            titulo.setText(null);
+            autor.setText(null);
+            qtdExemplares.setText(null);
+            volume.setText(null);
+            editora.setText(null);
+            anoPublicacao.setText(null);
+            numChamada.setText(null);
+
+            readJTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um exemplar para atualizar.");
+        }
+    }//GEN-LAST:event_atualizaExemplarActionPerformed
+
+    private void tabelaExemplaresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaExemplaresKeyReleased
+        if (tabelaExemplares.getSelectedRow() != -1) {
+
+            titulo.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 1).toString());
+            autor.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 2).toString());
+            qtdExemplares.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 3).toString());
+            volume.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 4).toString());
+            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
+            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
+            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+
+        }
+    }//GEN-LAST:event_tabelaExemplaresKeyReleased
+
+    private void tabelaExemplaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaExemplaresMouseClicked
+        if (tabelaExemplares.getSelectedRow() != -1) {
+
+            titulo.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 1).toString());
+            autor.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 2).toString());
+            qtdExemplares.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 3).toString());
+            volume.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 4).toString());
+            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
+            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
+            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+
+        }
+    }//GEN-LAST:event_tabelaExemplaresMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField anoPublicacao;
+    private javax.swing.JButton atualizaExemplar;
     private javax.swing.JTextField autor;
     private javax.swing.JButton cadastrarExemplar;
     private javax.swing.JButton cancelarCadastroExemplar;
     private javax.swing.JTextField editora;
-    private javax.swing.JLabel idExemplar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

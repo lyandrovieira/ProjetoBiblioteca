@@ -29,7 +29,8 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
@@ -38,14 +39,7 @@
                                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="titulo" min="-2" pref="533" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="idExemplar" min="-2" pref="18" max="-2" attributes="0"/>
-                                          </Group>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="volume" min="-2" pref="200" max="-2" attributes="0"/>
@@ -69,19 +63,13 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="qtdExemplares" min="-2" pref="120" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="titulo" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="193" max="-2" attributes="0"/>
-                                      <Component id="cadastrarExemplar" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
-                                      <Component id="cancelarCadastroExemplar" min="-2" max="-2" attributes="0"/>
-                                  </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
@@ -100,6 +88,15 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
+              <Component id="cadastrarExemplar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+              <Component id="atualizaExemplar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+              <Component id="cancelarCadastroExemplar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -109,11 +106,9 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="idExemplar" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="titulo" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -141,6 +136,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cadastrarExemplar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelarCadastroExemplar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="atualizaExemplar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="274" max="-2" attributes="0"/>
@@ -156,14 +152,6 @@
           <Font name="Arial" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cadastrar Exemplares"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="12" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="ID"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
@@ -220,13 +208,6 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="N&#xba; de chamada *"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="idExemplar">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="12" style="0"/>
-        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cadastrarExemplar">
@@ -383,6 +364,10 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabelaExemplaresMouseClicked"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tabelaExemplaresKeyReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -406,6 +391,18 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Campos marcados com  *  s&#xe3;o obrigat&#xf3;rios"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="atualizaExemplar">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="12" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Editar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="atualizaExemplarActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="atualizaExemplarKeyReleased"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

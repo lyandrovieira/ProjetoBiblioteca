@@ -22,12 +22,28 @@ public class Administradores extends javax.swing.JInternalFrame {
      */
     public Administradores() {
         initComponents();
+        selecionarOcupacao.setSelectedItem("Selecione");
+        readJTable();
         setClosable(true);
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void readJTable() {
+        DefaultTableModel tblAdmins = (DefaultTableModel) tabelaAdmin.getModel();
+        tblAdmins.setNumRows(0);
+
+        AdminsDAO u_dao = new AdminsDAO();
+        for (Admins u : u_dao.read()) {
+            tblAdmins.addRow(new Object[]{
+                u.getId(),
+                u.getNome(),
+                u.getOcupacao()
+            });
+        }
     }
     
     /**
@@ -54,6 +70,7 @@ public class Administradores extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAdmin = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
+        excluirAdmin = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -101,11 +118,11 @@ public class Administradores extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Usuário", "Ocupação"
+                "ID", "Usuário", "Ocupação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -117,6 +134,14 @@ public class Administradores extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 0, 0));
         jLabel6.setText("Campos marcados com  *  são obrigatórios");
+
+        excluirAdmin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        excluirAdmin.setText("Excluir");
+        excluirAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excluirAdminActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,9 +185,11 @@ public class Administradores extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel6)
                                 .addGap(232, 232, 232))))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(215, 215, 215)
+                .addGap(179, 179, 179)
                 .addComponent(cadastrarAdmin)
-                .addGap(71, 71, 71)
+                .addGap(44, 44, 44)
+                .addComponent(excluirAdmin)
+                .addGap(44, 44, 44)
                 .addComponent(cancelarAdmin)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -192,7 +219,8 @@ public class Administradores extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastrarAdmin)
-                    .addComponent(cancelarAdmin))
+                    .addComponent(cancelarAdmin)
+                    .addComponent(excluirAdmin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addContainerGap())
@@ -229,11 +257,33 @@ public class Administradores extends javax.swing.JInternalFrame {
             senhaAdmin.setText(null);
             confirmarSenha.setText(null);
             selecionarOcupacao.setSelectedItem("Selecione");
+            
+            readJTable();
 
         } else {
             JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
         }
     }//GEN-LAST:event_cadastrarAdminActionPerformed
+
+    private void excluirAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAdminActionPerformed
+        if (tabelaAdmin.getSelectedRow() != -1) {
+            Admins admin = new Admins();
+            AdminsDAO dao = new AdminsDAO();
+
+            admin.setId((int) tabelaAdmin.getValueAt(tabelaAdmin.getSelectedRow(), 0));
+
+            dao.delete(admin);
+
+            usuarioAdmin.setText(null);
+            senhaAdmin.setText(null);
+            confirmarSenha.setText(null);
+            selecionarOcupacao.setSelectedItem(null);
+
+            readJTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um exemplar para excluir.");
+        }
+    }//GEN-LAST:event_excluirAdminActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -241,6 +291,7 @@ public class Administradores extends javax.swing.JInternalFrame {
     private javax.swing.JButton cadastrarAdmin;
     private javax.swing.JButton cancelarAdmin;
     private javax.swing.JPasswordField confirmarSenha;
+    private javax.swing.JButton excluirAdmin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

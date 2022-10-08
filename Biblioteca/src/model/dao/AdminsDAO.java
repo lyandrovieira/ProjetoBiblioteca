@@ -7,7 +7,10 @@ package model.dao;
 import connection.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import model.bean.Admins;
 
@@ -35,6 +38,58 @@ public class AdminsDAO {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar:" + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+
+    }
+    
+    public List<Admins> read() {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Admins> admin = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_admins");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Admins adm = new Admins();
+
+                adm.setId(rs.getInt("id"));
+                adm.setNome(rs.getString("nome"));
+                adm.setOcupacao(rs.getString("ocupacao"));
+                admin.add(adm);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return admin;
+    }
+    
+    public void delete(Admins adm) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+
+        try {
+
+            stmt = con.prepareStatement("DELETE FROM tbl_admins WHERE id=?");
+            stmt.setInt(1, adm.getId());
+
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir:" + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt);
         }

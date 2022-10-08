@@ -1,5 +1,7 @@
-
 import java.awt.Dimension;
+import javax.swing.table.DefaultTableModel;
+import model.bean.Devolucoes;
+import model.dao.DevolucaoDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,12 +19,28 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
      */
     public ConsultarDevolucao() {
         initComponents();
+        readJTable();
         setClosable(true);
     }
 
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void readJTable() {
+        DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
+        tblUsers.setNumRows(0);
+
+        DevolucaoDAO dev_dao = new DevolucaoDAO();
+        for (Devolucoes dev : dev_dao.read()) {
+            tblUsers.addRow(new Object[]{
+                dev.getId(),
+                dev.getNumChamada(),
+                dev.getUsuario(),
+                dev.getDataDev()
+            });
+        }
     }
     
     /**
@@ -41,8 +59,6 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         btnPesqDevolucao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultaDev = new javax.swing.JTable();
-        editDev = new javax.swing.JButton();
-        excDev = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -70,11 +86,11 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução"
+                "ID", "Nº de Chamada", "Usuário", "Data Devolução"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -83,41 +99,33 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblConsultaDev);
 
-        editDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        editDev.setText("Editar");
-
-        excDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        excDev.setText("Excluir");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 188, Short.MAX_VALUE)
-                .addComponent(editDev)
-                .addGap(57, 57, 57)
-                .addComponent(excDev)
-                .addGap(58, 58, 58)
-                .addComponent(cancelDev)
-                .addGap(167, 167, 167))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGap(295, 295, 295)
+                .addComponent(cancelDev)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblLupaDev)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPesqDevolucao))
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(269, 269, 269)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblLupaDev)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPesqDevolucao))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(269, 269, 269)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 203, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,10 +140,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelDev)
-                    .addComponent(editDev)
-                    .addComponent(excDev))
+                .addComponent(cancelDev)
                 .addContainerGap())
         );
 
@@ -150,8 +155,6 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPesqDevolucao;
     private javax.swing.JButton cancelDev;
-    private javax.swing.JButton editDev;
-    private javax.swing.JButton excDev;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLupaDev;

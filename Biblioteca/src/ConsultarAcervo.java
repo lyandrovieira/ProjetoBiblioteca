@@ -1,5 +1,6 @@
 
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Acervo;
 import model.dao.AcervoDAO;
@@ -61,11 +62,10 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaConsulExemplares = new javax.swing.JTable();
+        excluirExemplar = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -79,12 +79,6 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setText("Pesquisar");
-
-        jButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton3.setText("Editar");
-
-        jButton4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton4.setText("Excluir");
 
         jButton5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton5.setText("Cancelar");
@@ -110,7 +104,20 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaConsulExemplares.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tabelaConsulExemplaresKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaConsulExemplares);
+
+        excluirExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        excluirExemplar.setText("Excluir");
+        excluirExemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excluirExemplarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,17 +138,16 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(177, 177, 177)
-                                .addComponent(jButton3)
-                                .addGap(57, 57, 57)
-                                .addComponent(jButton4)
-                                .addGap(56, 56, 56)
-                                .addComponent(jButton5))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(290, 290, 290)
                                 .addComponent(jLabel1)))
-                        .addGap(0, 168, Short.MAX_VALUE)))
+                        .addGap(0, 203, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(242, 242, 242)
+                .addComponent(excluirExemplar)
+                .addGap(37, 37, 37)
+                .addComponent(jButton5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,9 +163,8 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(jButton5)
+                    .addComponent(excluirExemplar))
                 .addContainerGap())
         );
 
@@ -170,13 +175,31 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void excluirExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirExemplarActionPerformed
+        if (tabelaConsulExemplares.getSelectedRow() != -1) {
+            Acervo acervo = new Acervo();
+            AcervoDAO dao = new AcervoDAO();
+
+            acervo.setId((int) tabelaConsulExemplares.getValueAt(tabelaConsulExemplares.getSelectedRow(), 0));
+
+            dao.delete(acervo);
+
+            readJTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um exemplar para excluir.");
+        }
+    }//GEN-LAST:event_excluirExemplarActionPerformed
+
+    private void tabelaConsulExemplaresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaConsulExemplaresKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelaConsulExemplaresKeyReleased
+
     
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton excluirExemplar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
