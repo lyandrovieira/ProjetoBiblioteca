@@ -1,5 +1,6 @@
 
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Emprestimos;
 import model.dao.EmprestimoDAO;
@@ -45,6 +46,38 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         }
     }
     
+    public void readJTableUsuario(String name) {       
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
+        tblConsultExemp.setNumRows(0);
+        
+        EmprestimoDAO emp_dao = new EmprestimoDAO();
+        for(Emprestimos emps: emp_dao.readNome(name)) {
+            tblConsultExemp.addRow(new Object[]{
+                emps.getId(),
+                emps.getNumChamada(),
+                emps.getUsuario(),
+                emps.getDataEmp(),
+                emps.getDataDev()
+            });
+        }
+    }
+    
+    public void readJTableChamada(String code) {       
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
+        tblConsultExemp.setNumRows(0);
+        
+        EmprestimoDAO emp_dao = new EmprestimoDAO();
+        for(Emprestimos emps: emp_dao.readChamada(code)) {
+            tblConsultExemp.addRow(new Object[]{
+                emps.getId(),
+                emps.getNumChamada(),
+                emps.getUsuario(),
+                emps.getDataEmp(),
+                emps.getDataDev()
+            });
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,6 +94,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         btnPesqEmprestimo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultaEmp = new javax.swing.JTable();
+        selecionarCategoria = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -76,12 +110,17 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         });
 
         lblLupaEmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblLupaEmp.setText("Lupa");
+        lblLupaEmp.setText("Categoria");
 
         pesqEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         btnPesqEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPesqEmprestimo.setText("Pesquisar");
+        btnPesqEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesqEmprestimoActionPerformed(evt);
+            }
+        });
 
         tblConsultaEmp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,6 +140,9 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblConsultaEmp);
 
+        selecionarCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        selecionarCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Nº de Chamada", "Usuário" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,18 +157,18 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblLupaEmp)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPesqEmprestimo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(269, 269, 269)
-                                .addComponent(jLabel1)))
-                        .addGap(0, 203, Short.MAX_VALUE)))
+                        .addGap(269, 269, 269)
+                        .addComponent(jLabel1)
+                        .addGap(0, 263, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblLupaEmp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pesqEmprestimo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnPesqEmprestimo)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -138,7 +180,8 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLupaEmp)
                     .addComponent(pesqEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesqEmprestimo))
+                    .addComponent(btnPesqEmprestimo)
+                    .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -153,6 +196,24 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelEmpActionPerformed
 
+    private void btnPesqEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqEmprestimoActionPerformed
+        if (selecionarCategoria.getSelectedItem() == "Usuário") {
+            if (pesqEmprestimo.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Usuário desejado no campo de pesquisa.");
+            } else {
+                readJTableUsuario(pesqEmprestimo.getText());
+            }
+        } else if (selecionarCategoria.getSelectedItem() == "Nº de Chamada") {
+            if (pesqEmprestimo.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Nº de Chamada desejado no campo de pesquisa.");
+            } else {
+                readJTableChamada(pesqEmprestimo.getText());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma categoria para efetuar pesquisa.");
+        }
+    }//GEN-LAST:event_btnPesqEmprestimoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPesqEmprestimo;
@@ -161,6 +222,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLupaEmp;
     private javax.swing.JTextField pesqEmprestimo;
+    private javax.swing.JComboBox<String> selecionarCategoria;
     private javax.swing.JTable tblConsultaEmp;
     // End of variables declaration//GEN-END:variables
 }

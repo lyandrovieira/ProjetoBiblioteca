@@ -82,6 +82,42 @@ public class UsuariosDAO {
 
         return usuarios;
     }
+    
+    public List<Usuarios> readNome(String name) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Usuarios> usuarios = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_users WHERE nome LIKE ?");
+            stmt.setString(1, "%"+name+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Usuarios users = new Usuarios();
+
+                users.setId(rs.getInt("id"));
+                users.setNome(rs.getString("nome"));
+                users.setDataNasc(rs.getString("dataNasc"));
+                users.setTelefone(rs.getString("telefone"));
+                users.setSexo(rs.getString("sexo"));
+                users.setTipo(rs.getString("tipo"));
+                users.setSerie(rs.getString("serie"));
+                users.setEndereco(rs.getString("endereco"));
+                usuarios.add(users);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return usuarios;
+    }
 
     public void update(Usuarios u) {
 

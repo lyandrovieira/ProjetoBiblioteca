@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -9,7 +8,6 @@ import model.dao.AcervoDAO;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -22,33 +20,96 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     public ConsultarAcervo() {
         initComponents();
         readJTable();
+        selecionarCategoria.setSelectedItem("Selecione");
         setClosable(true);
 
     }
+
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
-    public void readJTable() {       
+
+    public void readJTable() {
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tabelaConsulExemplares.getModel();
         tblConsultExemp.setNumRows(0);
-        
+
         AcervoDAO a_dao = new AcervoDAO();
-        for(Acervo a: a_dao.read()) {
+        for (Acervo a : a_dao.read()) {
             tblConsultExemp.addRow(new Object[]{
                 a.getId(),
                 a.getTitulo(),
                 a.getAutor(),
                 a.getExemplar(),
                 a.getVolume(),
+                a.getEdicao(),
                 a.getEditora(),
                 a.getAno_publi(),
                 a.getChamada()
             });
         }
     }
-    
+
+    public void readJTableTitulo(String title) {
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tabelaConsulExemplares.getModel();
+        tblConsultExemp.setNumRows(0);
+
+        AcervoDAO a_dao = new AcervoDAO();
+        for (Acervo a : a_dao.readTitulo(title)) {
+            tblConsultExemp.addRow(new Object[]{
+                a.getId(),
+                a.getTitulo(),
+                a.getAutor(),
+                a.getExemplar(),
+                a.getVolume(),
+                a.getEdicao(),
+                a.getEditora(),
+                a.getAno_publi(),
+                a.getChamada()
+            });
+        }
+    }
+
+    public void readJTableAutor(String author) {
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tabelaConsulExemplares.getModel();
+        tblConsultExemp.setNumRows(0);
+
+        AcervoDAO a_dao = new AcervoDAO();
+        for (Acervo a : a_dao.readAutor(author)) {
+            tblConsultExemp.addRow(new Object[]{
+                a.getId(),
+                a.getTitulo(),
+                a.getAutor(),
+                a.getExemplar(),
+                a.getVolume(),
+                a.getEdicao(),
+                a.getEditora(),
+                a.getAno_publi(),
+                a.getChamada()
+            });
+        }
+    }
+
+    public void readJTableChamada(String code) {
+        DefaultTableModel tblConsultExemp = (DefaultTableModel) tabelaConsulExemplares.getModel();
+        tblConsultExemp.setNumRows(0);
+
+        AcervoDAO a_dao = new AcervoDAO();
+        for (Acervo a : a_dao.readChamada(code)) {
+            tblConsultExemp.addRow(new Object[]{
+                a.getId(),
+                a.getTitulo(),
+                a.getAutor(),
+                a.getExemplar(),
+                a.getVolume(),
+                a.getEdicao(),
+                a.getEditora(),
+                a.getAno_publi(),
+                a.getChamada()
+            });
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,26 +120,29 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtPesqExemplar = new javax.swing.JTextField();
+        btnPesqExemplar = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaConsulExemplares = new javax.swing.JTable();
         excluirExemplar = new javax.swing.JButton();
+        selecionarCategoria = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Consultar Acervo");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Lupa");
+        txtPesqExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton1.setText("Pesquisar");
+        btnPesqExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnPesqExemplar.setText("Pesquisar");
+        btnPesqExemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesqExemplarActionPerformed(evt);
+            }
+        });
 
         jButton5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton5.setText("Cancelar");
@@ -119,28 +183,32 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
             }
         });
 
+        selecionarCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        selecionarCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Título", "Autor", "Nº Chamada" }));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Categoria");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
+                        .addGap(275, 275, 275)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(290, 290, 290)
-                                .addComponent(jLabel1)))
-                        .addGap(0, 203, Short.MAX_VALUE)))
+                        .addComponent(jLabel3)
+                        .addGap(6, 6, 6)
+                        .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPesqExemplar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPesqExemplar)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(242, 242, 242)
@@ -152,15 +220,18 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtPesqExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPesqExemplar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
@@ -194,17 +265,41 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tabelaConsulExemplaresKeyReleased
 
-    
+    private void btnPesqExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqExemplarActionPerformed
+        if (selecionarCategoria.getSelectedItem() == "Título") {
+            if (txtPesqExemplar.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Título desejado no campo de pesquisa.");
+            } else {
+                readJTableTitulo(txtPesqExemplar.getText());
+            }
+        } else if (selecionarCategoria.getSelectedItem() == "Autor") {
+            if (txtPesqExemplar.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Autor desejado no campo de pesquisa.");
+            } else {
+                readJTableAutor(txtPesqExemplar.getText());
+            }
+        } else if (selecionarCategoria.getSelectedItem() == "Nº Chamada") {
+            if (txtPesqExemplar.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Nº de Chamada desejado no campo de pesquisa.");
+            } else {
+                readJTableChamada(txtPesqExemplar.getText());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma categoria para efetuar pesquisa.");
+        }
+
+    }//GEN-LAST:event_btnPesqExemplarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPesqExemplar;
     private javax.swing.JButton excluirExemplar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> selecionarCategoria;
     private javax.swing.JTable tabelaConsulExemplares;
+    private javax.swing.JTextField txtPesqExemplar;
     // End of variables declaration//GEN-END:variables
 }

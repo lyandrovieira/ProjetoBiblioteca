@@ -40,6 +40,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                 a.getAutor(),
                 a.getExemplar(),
                 a.getVolume(),
+                a.getEdicao(),
                 a.getEditora(),
                 a.getAno_publi(),
                 a.getChamada()
@@ -77,6 +78,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         titulo = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         atualizaExemplar = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        edicao = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(708, 600));
 
@@ -144,11 +147,11 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Título", "Autor", "Exemplares", "Volume", "Editora", "Ano", "Nº de Chamada"
+                "ID", "Título", "Autor", "Exemplares", "Volume", "Edição", "Editora", "Ano", "Nº de Chamada"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -187,6 +190,12 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Edição");
+
+        edicao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        edicao.setPreferredSize(new java.awt.Dimension(320, 25));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -208,15 +217,21 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(anoPublicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(anoPublicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(jLabel9))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(jLabel11)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(edicao, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(20, 20, 20)
+                                                        .addComponent(jLabel7)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel9)
-                                                    .addComponent(jLabel7))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                                    .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(editora, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(autor, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,7 +283,9 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                     .addComponent(jLabel6)
                     .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(editora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(editora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(edicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -302,7 +319,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             acervo.setTitulo(titulo.getText());
             acervo.setAutor(autor.getText());
             acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
-            acervo.setVolume(Integer.parseInt(volume.getText()));
+            acervo.setVolume(volume.getText());
+            acervo.setEdicao(Integer.parseInt(edicao.getText()));
             acervo.setEditora(editora.getText());
             acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
             acervo.setChamada(numChamada.getText());
@@ -313,6 +331,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             autor.setText(null);
             qtdExemplares.setText(null);
             volume.setText(null);
+            edicao.setText(null);
             editora.setText(null);
             anoPublicacao.setText(null);
             numChamada.setText(null);
@@ -334,7 +353,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             acervo.setTitulo(titulo.getText());
             acervo.setAutor(autor.getText());
             acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
-            acervo.setVolume(Integer.parseInt(volume.getText()));
+            acervo.setVolume(volume.getText());
+            acervo.setEdicao(Integer.parseInt(edicao.getText()));
             acervo.setEditora(editora.getText());
             acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
             acervo.setChamada(numChamada.getText());
@@ -346,6 +366,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             autor.setText(null);
             qtdExemplares.setText(null);
             volume.setText(null);
+            edicao.setText(null);
             editora.setText(null);
             anoPublicacao.setText(null);
             numChamada.setText(null);
@@ -363,9 +384,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             autor.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 2).toString());
             qtdExemplares.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 3).toString());
             volume.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 4).toString());
-            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
-            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
-            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+            edicao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
+            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
+            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 8).toString());
 
         }
     }//GEN-LAST:event_tabelaExemplaresKeyReleased
@@ -377,9 +399,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             autor.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 2).toString());
             qtdExemplares.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 3).toString());
             volume.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 4).toString());
-            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
-            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
-            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+            edicao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 5).toString());
+            editora.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 6).toString());
+            anoPublicacao.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 7).toString());
+            numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 8).toString());
 
         }
     }//GEN-LAST:event_tabelaExemplaresMouseClicked
@@ -391,9 +414,11 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     private javax.swing.JTextField autor;
     private javax.swing.JButton cadastrarExemplar;
     private javax.swing.JButton cancelarCadastroExemplar;
+    private javax.swing.JTextField edicao;
     private javax.swing.JTextField editora;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

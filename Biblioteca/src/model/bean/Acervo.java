@@ -14,7 +14,8 @@ public class Acervo {
     private String titulo;
     private String autor;
     private int exemplar;
-    private int volume;
+    private String volume;
+    private int edicao;
     private String editora;
     private int ano_publi;
     private String chamada;
@@ -51,12 +52,20 @@ public class Acervo {
         this.exemplar = exemplar;
     }
 
-    public int getVolume() {
+    public String getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(String volume) {
         this.volume = volume;
+    }
+
+    public int getEdicao() {
+        return edicao;
+    }
+
+    public void setEdicao(int edicao) {
+        this.edicao = edicao;
     }
 
     public String getEditora() {

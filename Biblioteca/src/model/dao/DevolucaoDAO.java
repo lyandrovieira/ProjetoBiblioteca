@@ -74,6 +74,72 @@ public class DevolucaoDAO {
         return dev;
     }
     
+    public List<Devolucoes> readNome(String name) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Devolucoes> dev = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_dev WHERE usuario LIKE ?");
+            stmt.setString(1, "%"+name+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Devolucoes devs = new Devolucoes();
+
+                devs.setId(rs.getInt("id"));
+                devs.setNumChamada(rs.getString("numChamada"));
+                devs.setUsuario(rs.getString("usuario"));
+                devs.setDataDev(rs.getString("dataDev"));
+                
+                dev.add(devs);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return dev;
+    }
+    
+    public List<Devolucoes> readChamada(String code) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Devolucoes> dev = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_dev WHERE numChamada LIKE ?");
+            stmt.setString(1, "%"+code+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Devolucoes devs = new Devolucoes();
+
+                devs.setId(rs.getInt("id"));
+                devs.setNumChamada(rs.getString("numChamada"));
+                devs.setUsuario(rs.getString("usuario"));
+                devs.setDataDev(rs.getString("dataDev"));
+                
+                dev.add(devs);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return dev;
+    }
+    
     public void update(Devolucoes dev) {
 
         Connection con = ConnectionFactory.getConnection();

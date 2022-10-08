@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Devolucoes;
 import model.dao.DevolucaoDAO;
@@ -43,6 +44,36 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         }
     }
     
+    public void readJTableUsuario(String name) {
+        DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
+        tblUsers.setNumRows(0);
+
+        DevolucaoDAO dev_dao = new DevolucaoDAO();
+        for (Devolucoes dev : dev_dao.readNome(name)) {
+            tblUsers.addRow(new Object[]{
+                dev.getId(),
+                dev.getNumChamada(),
+                dev.getUsuario(),
+                dev.getDataDev()
+            });
+        }
+    }
+    
+    public void readJTableChamada(String code) {
+        DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
+        tblUsers.setNumRows(0);
+
+        DevolucaoDAO dev_dao = new DevolucaoDAO();
+        for (Devolucoes dev : dev_dao.readChamada(code)) {
+            tblUsers.addRow(new Object[]{
+                dev.getId(),
+                dev.getNumChamada(),
+                dev.getUsuario(),
+                dev.getDataDev()
+            });
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +90,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         btnPesqDevolucao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultaDev = new javax.swing.JTable();
+        selecionarCategoria = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -74,12 +106,17 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         });
 
         lblLupaDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblLupaDev.setText("Lupa");
+        lblLupaDev.setText("Categoria");
 
         pesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         btnPesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPesqDevolucao.setText("Pesquisar");
+        btnPesqDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesqDevolucaoActionPerformed(evt);
+            }
+        });
 
         tblConsultaDev.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,6 +136,9 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblConsultaDev);
 
+        selecionarCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        selecionarCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Nº de Chamada", "Usuário" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,18 +153,18 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblLupaDev)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPesqDevolucao))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(269, 269, 269)
-                                .addComponent(jLabel1)))
-                        .addGap(0, 203, Short.MAX_VALUE)))
+                        .addGap(269, 269, 269)
+                        .addComponent(jLabel1)
+                        .addGap(0, 277, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblLupaDev)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pesqDevolucao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPesqDevolucao)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,7 +176,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLupaDev)
                     .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesqDevolucao))
+                    .addComponent(btnPesqDevolucao)
+                    .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -151,6 +192,24 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelDevActionPerformed
 
+    private void btnPesqDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqDevolucaoActionPerformed
+        if (selecionarCategoria.getSelectedItem() == "Usuário") {
+            if (pesqDevolucao.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Usuário desejado no campo de pesquisa.");
+            } else {
+                readJTableUsuario(pesqDevolucao.getText());
+            }
+        } else if (selecionarCategoria.getSelectedItem() == "Nº de Chamada") {
+            if (pesqDevolucao.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Nº de Chamada desejado no campo de pesquisa.");
+            } else {
+                readJTableChamada(pesqDevolucao.getText());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma categoria para efetuar pesquisa.");
+        }
+    }//GEN-LAST:event_btnPesqDevolucaoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPesqDevolucao;
@@ -159,6 +218,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLupaDev;
     private javax.swing.JTextField pesqDevolucao;
+    private javax.swing.JComboBox<String> selecionarCategoria;
     private javax.swing.JTable tblConsultaDev;
     // End of variables declaration//GEN-END:variables
 }

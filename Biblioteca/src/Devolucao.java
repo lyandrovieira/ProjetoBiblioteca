@@ -212,8 +212,8 @@ public class Devolucao extends javax.swing.JInternalFrame {
             Devolucoes dev = new Devolucoes();
             DevolucaoDAO dao = new DevolucaoDAO();
 
-            dev.setNumChamada(usuarioDevolucao.getText());
-            dev.setUsuario(codigoDevolucao.getText());
+            dev.setNumChamada(codigoDevolucao.getText());
+            dev.setUsuario(usuarioDevolucao.getText());
             dev.setDataDev(dataDevolucao.getText());
 
             dao.create(dev);

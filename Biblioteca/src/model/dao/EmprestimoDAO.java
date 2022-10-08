@@ -77,6 +77,74 @@ public class EmprestimoDAO {
         return emp;
     }
     
+    public List<Emprestimos> readNome(String name) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Emprestimos> emp = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_emp WHERE usuario LIKE ?");
+            stmt.setString(1, "%"+name+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Emprestimos emps = new Emprestimos();
+
+                emps.setId(rs.getInt("id"));
+                emps.setNumChamada(rs.getString("numChamada"));
+                emps.setUsuario(rs.getString("usuario"));
+                emps.setDataEmp(rs.getString("dataEmp"));
+                emps.setDataDev(rs.getString("dataDev"));
+                
+                emp.add(emps);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return emp;
+    }
+    
+    public List<Emprestimos> readChamada(String code) {
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Emprestimos> emp = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM tbl_emp WHERE numChamada LIKE ?");
+            stmt.setString(1, "%"+code+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Emprestimos emps = new Emprestimos();
+
+                emps.setId(rs.getInt("id"));
+                emps.setNumChamada(rs.getString("numChamada"));
+                emps.setUsuario(rs.getString("usuario"));
+                emps.setDataEmp(rs.getString("dataEmp"));
+                emps.setDataDev(rs.getString("dataDev"));
+                
+                emp.add(emps);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao exibir dados em tabela: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+
+        return emp;
+    }
+    
     public void update(Emprestimos empre) {
 
         Connection con = ConnectionFactory.getConnection();

@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +48,25 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         }
     }
     
+    public void readJTableName(String name) {       
+        DefaultTableModel tblUsers = (DefaultTableModel) tblConsultUser.getModel();
+        tblUsers.setNumRows(0);
+        
+        UsuariosDAO u_dao = new UsuariosDAO();
+        for(Usuarios u: u_dao.readNome(name)) {
+            tblUsers.addRow(new Object[]{
+                u.getId(),
+                u.getNome(),
+                u.getDataNasc(),
+                u.getTelefone(),
+                u.getSexo(),
+                u.getTipo(),
+                u.getSerie(),
+                u.getEndereco()
+            });
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,7 +76,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        txtPesqUsuario = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         cancelarUser = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -69,10 +87,15 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPesqUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setText("Pesquisar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         cancelarUser.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cancelarUser.setText("Cancelar");
@@ -86,7 +109,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         jLabel1.setText("Usuários Cadastrados");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Lupa");
+        jLabel2.setText("Nome do usuário");
 
         tblConsultUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,13 +149,13 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                                 .addContainerGap()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPesqUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(272, 272, 272)
                                 .addComponent(jLabel1)))
-                        .addGap(0, 203, Short.MAX_VALUE))
+                        .addGap(0, 135, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
@@ -152,7 +175,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPesqUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
@@ -185,6 +208,14 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_excluirUsuarioActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (txtPesqUsuario.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Digite o Título desejado no campo de pesquisa.");
+            } else {
+                readJTableName(txtPesqUsuario.getText());
+            }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarUser;
@@ -193,7 +224,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblConsultUser;
+    private javax.swing.JTextField txtPesqUsuario;
     // End of variables declaration//GEN-END:variables
 }
