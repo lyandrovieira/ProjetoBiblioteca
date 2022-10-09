@@ -16,10 +16,7 @@ import model.dao.EmprestimoDAO;
  * @author lyand
  */
 public class Emprestimo extends javax.swing.JInternalFrame {
-    
-    /**
-     * Creates new form Emprestimo
-     */
+
     public Emprestimo() {   
         initComponents();
         setDate();
@@ -27,12 +24,12 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         setClosable(true);       
     }
 
-    public void setPosicao() {       
+    public void setPosicao() { //Posiciona o JInternalFrame no centro do JFrame Principal.      
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
     
-    public void readJTable() {
+    public void readJTable() { //Exibe os dados de Empréstimo na JTable.
         DefaultTableModel tblEmp = (DefaultTableModel) tabelaEmprestimo.getModel();
         tblEmp.setNumRows(0);
 
@@ -48,7 +45,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }
     
-    public void setDate() {
+    public void setDate() {//Configura a exibição das datas de empréstimo e devolução de exemplares.
         
         LocalDate dEmp = LocalDate.now();
         LocalDate dDev = dEmp.plusDays(7);
@@ -96,6 +93,11 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         numChamada.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         usuarioEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        usuarioEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuarioEmprestimoActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Data Empréstimo");
@@ -247,6 +249,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelarEmprestimoActionPerformed
 
+    //Confirma o empréstimo de exemplar ao clicar no botão de confirmação.
     private void confirmarEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarEmprestimoActionPerformed
         if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
@@ -268,6 +271,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_confirmarEmprestimoActionPerformed
 
+    //Edita os dados de empréstimo da linha selecionado no JTable.
     private void editarEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarEmprestimoActionPerformed
         if (tabelaEmprestimo.getSelectedRow() != -1) {            
             Emprestimos emprestimo = new Emprestimos();
@@ -291,6 +295,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_editarEmprestimoActionPerformed
 
+    //Seleciona linha da JTable.
     private void tabelaEmprestimoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEmprestimoKeyReleased
         if (tabelaEmprestimo.getSelectedRow() != -1) {
             
@@ -302,6 +307,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tabelaEmprestimoKeyReleased
 
+    //Seleciona linha da JTable.
     private void tabelaEmprestimoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEmprestimoMouseClicked
         if (tabelaEmprestimo.getSelectedRow() != -1) {
 
@@ -312,6 +318,28 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
         }
     }//GEN-LAST:event_tabelaEmprestimoMouseClicked
+
+    //Confirma o empréstimo de exemplar ao clicar ENTER.
+    private void usuarioEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioEmprestimoActionPerformed
+        if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
+            JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
+        } else {            
+            Emprestimos emprestimo = new Emprestimos();
+            EmprestimoDAO dao = new EmprestimoDAO();
+            
+            emprestimo.setNumChamada(numChamada.getText());
+            emprestimo.setUsuario(usuarioEmprestimo.getText());
+            emprestimo.setDataEmp(dataEmprestimo.getText());
+            emprestimo.setDataDev(dataDevolucao.getText());
+            
+            dao.create(emprestimo);
+            
+            numChamada.setText(null);
+            usuarioEmprestimo.setText(null);
+            
+            readJTable();
+        }
+    }//GEN-LAST:event_usuarioEmprestimoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

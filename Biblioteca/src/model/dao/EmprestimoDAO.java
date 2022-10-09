@@ -20,7 +20,7 @@ import model.bean.Emprestimos;
  */
 public class EmprestimoDAO {
 
-    public void create(Emprestimos emps) {
+    public void create(Emprestimos emps) { //Salva os empréstimos realizados.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -44,7 +44,7 @@ public class EmprestimoDAO {
         }
     }
 
-    public List<Emprestimos> read() {
+    public List<Emprestimos> read() { //Lê os dados de empréstimo.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -77,7 +77,7 @@ public class EmprestimoDAO {
         return emp;
     }
     
-    public List<Emprestimos> readNome(String name) {
+    public List<Emprestimos> readNome(String name) { //Lê os empréstimos com base na pesquisa por nome.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -111,7 +111,7 @@ public class EmprestimoDAO {
         return emp;
     }
     
-    public List<Emprestimos> readChamada(String code) {
+    public List<Emprestimos> readChamada(String code) { //Lê os empréstimos com base na pesquisa por numChamada.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -145,7 +145,7 @@ public class EmprestimoDAO {
         return emp;
     }
     
-    public void update(Emprestimos empre) {
+    public void update(Emprestimos empre) { //Atualiza os dados de empréstimo no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -171,7 +171,7 @@ public class EmprestimoDAO {
 
     }
     
-    public void delete(Emprestimos empre) {
+    public void delete(Emprestimos empre) { //Deleta dados de empréstimo no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

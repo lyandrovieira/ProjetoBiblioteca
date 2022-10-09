@@ -19,7 +19,7 @@ import model.bean.Devolucoes;
  * @author lyand
  */
 public class DevolucaoDAO {
-    public void create(Devolucoes emps) {
+    public void create(Devolucoes emps) { //Salva dados de Devolução no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -42,7 +42,7 @@ public class DevolucaoDAO {
         }
     }
 
-    public List<Devolucoes> read() {
+    public List<Devolucoes> read() { //Lê os dados de devolução no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -74,7 +74,7 @@ public class DevolucaoDAO {
         return dev;
     }
     
-    public List<Devolucoes> readNome(String name) {
+    public List<Devolucoes> readNome(String name) { //Lê os dados de devolução condizentes com pesquisa por nome.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -107,7 +107,7 @@ public class DevolucaoDAO {
         return dev;
     }
     
-    public List<Devolucoes> readChamada(String code) {
+    public List<Devolucoes> readChamada(String code) {//Lê os dados de devolução condizentes com pesquisa por numChamada.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -140,7 +140,7 @@ public class DevolucaoDAO {
         return dev;
     }
     
-    public void update(Devolucoes dev) {
+    public void update(Devolucoes dev) { //Atualiza dados de devolução no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -165,7 +165,7 @@ public class DevolucaoDAO {
 
     }
     
-    public void delete(Devolucoes dev) {
+    public void delete(Devolucoes dev) { //Deleta os dados de devolução.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

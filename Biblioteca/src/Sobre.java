@@ -20,7 +20,7 @@ public class Sobre extends javax.swing.JInternalFrame {
         setClosable(true);
     }
 
-    public void setPosicao() {
+    public void setPosicao() { //Posiciona o JIternalFrame no centro do JFramePrincipal.
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }

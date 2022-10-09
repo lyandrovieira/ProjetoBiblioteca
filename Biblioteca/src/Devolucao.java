@@ -17,9 +17,6 @@ import model.dao.DevolucaoDAO;
  */
 public class Devolucao extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form Devolucao
-     */
     public Devolucao() {
         initComponents();
         readJTable();
@@ -27,12 +24,12 @@ public class Devolucao extends javax.swing.JInternalFrame {
         setClosable(true);
     }
 
-    public void setPosicao() {
+    public void setPosicao() { //Posiciona o JInternalFrame no centro da JFrame Principal.
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
     
-    public void readJTable() {
+    public void readJTable() { //Exibe os dados de devolução na JTable.
         DefaultTableModel tblUsers = (DefaultTableModel) tabelaDevolucao.getModel();
         tblUsers.setNumRows(0);
 
@@ -47,7 +44,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
         }
     }
     
-    public void setDate() {
+    public void setDate() { //Configura a exibição da data atual e seta como data na qual o exemplar foi devolvido.
         
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -83,6 +80,12 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Nº de Chamada *");
+
+        codigoDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                codigoDevolucaoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Usuário *");
@@ -205,6 +208,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelarDevolucaoActionPerformed
 
+    //Efetua a devolução de exemplar ao clicar no botão de confirmação.
     private void confirmarDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarDevolucaoActionPerformed
         if ((codigoDevolucao.getText().isBlank()) || (usuarioDevolucao.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
@@ -224,6 +228,27 @@ public class Devolucao extends javax.swing.JInternalFrame {
             readJTable();
         }
     }//GEN-LAST:event_confirmarDevolucaoActionPerformed
+
+    //Efetua a devolução de exemplar ao clicar ENTER.
+    private void codigoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codigoDevolucaoActionPerformed
+        if ((codigoDevolucao.getText().isBlank()) || (usuarioDevolucao.getText().isBlank())) {
+            JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
+        } else {
+            Devolucoes dev = new Devolucoes();
+            DevolucaoDAO dao = new DevolucaoDAO();
+
+            dev.setNumChamada(codigoDevolucao.getText());
+            dev.setUsuario(usuarioDevolucao.getText());
+            dev.setDataDev(dataDevolucao.getText());
+
+            dao.create(dev);
+
+            usuarioDevolucao.setText(null);
+            codigoDevolucao.setText(null);
+
+            readJTable();
+        }
+    }//GEN-LAST:event_codigoDevolucaoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

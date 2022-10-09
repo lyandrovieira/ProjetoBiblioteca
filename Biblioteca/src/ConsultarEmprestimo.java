@@ -16,21 +16,18 @@ import model.dao.EmprestimoDAO;
  */
 public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ConsultarEmprestimo
-     */
     public ConsultarEmprestimo() {
         initComponents();
         readJTable();
         setClosable(true);
     }
 
-    public void setPosicao() {
+    public void setPosicao() { //Posiciona o JInternalFrame no centro do JFrame Principaç.
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
     
-    public void readJTable() {       
+    public void readJTable() { //Exibe os dados de Empréstimo na JTable.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
         
@@ -46,7 +43,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         }
     }
     
-    public void readJTableUsuario(String name) {       
+    public void readJTableUsuario(String name) { //Exibe o resultado da pesquisa de empréstimo por usuário.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
         
@@ -62,7 +59,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         }
     }
     
-    public void readJTableChamada(String code) {       
+    public void readJTableChamada(String code) { //Exibe o resultado da pesquisa de empréstimo por nº de chamada.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
         
@@ -196,6 +193,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelEmpActionPerformed
 
+    //Efetua pesquisa de emprestimos no DB com base no critério de pesquisa selecionado.
     private void btnPesqEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqEmprestimoActionPerformed
         if (selecionarCategoria.getSelectedItem() == "Usuário") {
             if (pesqEmprestimo.getText().isBlank()) {

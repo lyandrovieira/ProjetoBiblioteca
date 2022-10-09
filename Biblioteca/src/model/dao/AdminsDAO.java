@@ -20,7 +20,7 @@ import model.bean.Admins;
  */
 public class AdminsDAO {
 
-    public void create(Admins adm) {
+    public void create(Admins adm) { //Salva os administradores no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -44,7 +44,7 @@ public class AdminsDAO {
 
     }
     
-    public List<Admins> read() {
+    public List<Admins> read() { //Lê os dados de admins salvos no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -74,7 +74,7 @@ public class AdminsDAO {
         return admin;
     }
     
-    public void delete(Admins adm) {
+    public void delete(Admins adm) { //Deleta administradores.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

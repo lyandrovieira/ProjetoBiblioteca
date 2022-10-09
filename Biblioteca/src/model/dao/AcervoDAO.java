@@ -20,7 +20,7 @@ import model.bean.Acervo;
  */
 public class AcervoDAO {
 
-    public void create(Acervo a) {
+    public void create(Acervo a) { //Insere os dados digitados na tabela de exemplares do DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -49,7 +49,7 @@ public class AcervoDAO {
 
     }
 
-    public List<Acervo> read() {
+    public List<Acervo> read() { //Lê os dados do DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -86,7 +86,7 @@ public class AcervoDAO {
         return acervoExemp;
     }
     
-    public List<Acervo> readTitulo(String title) {
+    public List<Acervo> readTitulo(String title) { //Lê os exemplares registrados condizentes com o título pesquisado.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -124,7 +124,7 @@ public class AcervoDAO {
         return acervoExemp;
     }
     
-    public List<Acervo> readAutor(String author) {
+    public List<Acervo> readAutor(String author) { //Lê os exemplares registrados condizentes com o autor pesquisado.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -162,7 +162,7 @@ public class AcervoDAO {
         return acervoExemp;
     }
     
-    public List<Acervo> readChamada(String code) {
+    public List<Acervo> readChamada(String code) { //Lê os exemplares registrados condizentes com o numChamada pesquisado.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -200,7 +200,7 @@ public class AcervoDAO {
         return acervoExemp;
     }
 
-    public void update(Acervo a) {
+    public void update(Acervo a) { //Atualiza os exemplares registrados.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -230,7 +230,7 @@ public class AcervoDAO {
 
     }
     
-    public void delete(Acervo a) {
+    public void delete(Acervo a) {//Apaga exemplares no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

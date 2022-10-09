@@ -183,6 +183,7 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Chama a tela de cadastro de exemplar.
     private void subMenuCadExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadExemplarActionPerformed
         CadastroExemplar cadastroexemplar = new CadastroExemplar();
         desktoppanel.add(cadastroexemplar);
@@ -190,6 +191,7 @@ public class Principal extends javax.swing.JFrame {
         cadastroexemplar.setVisible(true);
     }//GEN-LAST:event_subMenuCadExemplarActionPerformed
 
+    //Chama a tela de consulta de acervo.
     private void subMenuConsultAcervoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultAcervoActionPerformed
         ConsultarAcervo consultaacervo = new ConsultarAcervo();
         desktoppanel.add(consultaacervo);
@@ -197,6 +199,7 @@ public class Principal extends javax.swing.JFrame {
         consultaacervo.setVisible(true);
     }//GEN-LAST:event_subMenuConsultAcervoActionPerformed
 
+    //Chama a tela de cadastro de usuário.
     private void subMenuCadUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadUserActionPerformed
         CadastrarUsuarios cadusers = new CadastrarUsuarios();
         desktoppanel.add(cadusers);
@@ -204,6 +207,7 @@ public class Principal extends javax.swing.JFrame {
         cadusers.setVisible(true);
     }//GEN-LAST:event_subMenuCadUserActionPerformed
 
+    //Chama a tela de consulta de usuário.
     private void subMenuConsultarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultarUserActionPerformed
         UsuariosCadastrados userscad = new UsuariosCadastrados();
         desktoppanel.add(userscad);
@@ -211,6 +215,7 @@ public class Principal extends javax.swing.JFrame {
         userscad.setVisible(true);
     }//GEN-LAST:event_subMenuConsultarUserActionPerformed
 
+    ////Chama a tela de consulta de administradores.
     private void subMenuAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuAdminActionPerformed
         Administradores adms = new Administradores();
         desktoppanel.add(adms);
@@ -218,6 +223,7 @@ public class Principal extends javax.swing.JFrame {
         adms.setVisible(true);
     }//GEN-LAST:event_subMenuAdminActionPerformed
 
+    ////Chama a tela de empréstimo.
     private void subMenuEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuEmpActionPerformed
         Emprestimo emp = new Emprestimo();
         desktoppanel.add(emp);
@@ -225,6 +231,7 @@ public class Principal extends javax.swing.JFrame {
         emp.setVisible(true);
     }//GEN-LAST:event_subMenuEmpActionPerformed
 
+    //Chama a tela de devolução.
     private void subMenuDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuDevActionPerformed
         Devolucao dev = new Devolucao();
         desktoppanel.add(dev);
@@ -232,6 +239,7 @@ public class Principal extends javax.swing.JFrame {
         dev.setVisible(true);
     }//GEN-LAST:event_subMenuDevActionPerformed
 
+    //Chama a tela de consulta de empréstimo.
     private void subMenuConsultExempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultExempActionPerformed
         ConsultarEmprestimo consultempres = new ConsultarEmprestimo();
         desktoppanel.add(consultempres);
@@ -240,9 +248,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_subMenuConsultExempActionPerformed
 
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSobreActionPerformed
-     
+
     }//GEN-LAST:event_menuSobreActionPerformed
 
+    ////Chama a tela de informações sobre o software.
     private void subMenuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuSobreActionPerformed
         Sobre sobre = new Sobre();
         desktoppanel.add(sobre);
@@ -250,6 +259,7 @@ public class Principal extends javax.swing.JFrame {
         sobre.setVisible(true);
     }//GEN-LAST:event_subMenuSobreActionPerformed
 
+    //Chama a tela de consulta de devoluções.
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         ConsultarDevolucao consultdev = new ConsultarDevolucao();
         desktoppanel.add(consultdev);

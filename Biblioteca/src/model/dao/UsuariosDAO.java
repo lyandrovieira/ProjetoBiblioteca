@@ -20,7 +20,7 @@ import model.bean.Usuarios;
  */
 public class UsuariosDAO {
 
-    public void create(Usuarios u) {
+    public void create(Usuarios u) { //Salva dados de usuário no DB.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -48,7 +48,7 @@ public class UsuariosDAO {
 
     }
 
-    public List<Usuarios> read() {
+    public List<Usuarios> read() { //Lê os dados de usuário salvos.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -83,7 +83,7 @@ public class UsuariosDAO {
         return usuarios;
     }
     
-    public List<Usuarios> readNome(String name) {
+    public List<Usuarios> readNome(String name) { //Retorna resultado pesquisa de usuário por nome.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -119,7 +119,7 @@ public class UsuariosDAO {
         return usuarios;
     }
 
-    public void update(Usuarios u) {
+    public void update(Usuarios u) { //Atualiza usuários.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -148,7 +148,7 @@ public class UsuariosDAO {
 
     }
     
-    public void delete(Usuarios u) {
+    public void delete(Usuarios u) { //Deleta usuários.
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
