@@ -9,7 +9,9 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Emprestimos;
+import model.bean.Acervo;
 import model.dao.EmprestimoDAO;
+import model.dao.AcervoDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -93,7 +95,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "UPDATE exemplar FROM tbl_books WHERE chamada LIKE ?";
+        String sql = "UPDATE exemplar FROM tbl_books WHERE id LIKE ?";
         
         try {
             stmt = con.prepareStatement(sql);

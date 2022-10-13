@@ -155,7 +155,7 @@ public class UsuariosDAO {
 
         try {
 
-            stmt = con.prepareStatement("DELETE FROM tbl_users  WHERE id=?");
+            stmt = con.prepareStatement("DELETE FROM tbl_users WHERE id=?");
             stmt.setInt(1, u.getId());
 
             stmt.executeUpdate();
