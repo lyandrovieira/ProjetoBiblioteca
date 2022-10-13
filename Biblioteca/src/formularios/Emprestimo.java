@@ -1,5 +1,8 @@
 package formularios;
 
+import connection.ConnectionFactory;
+import java.sql.*;
+import net.proteanit.sql.DbUtils;
 import java.awt.Dimension;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -7,8 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Emprestimos;
 import model.dao.EmprestimoDAO;
-import model.bean.Acervo;
-import model.dao.AcervoDAO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -50,10 +51,62 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }
 
-    public void alterarQtdExemplares() {
-        
+    public void pesquisarUsuarioNome() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT id, nome, serie FROM tbl_users WHERE nome LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + usuarioEmprestimo.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tblUserEmp.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
     }
-    
+
+    public void pesquisarLivroChamada() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT id, titulo, autor, chamada FROM tbl_books WHERE chamada LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + numChamada.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tblChamadaEmp.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+
+    public void alterarQtdExemplares() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "UPDATE exemplar FROM tbl_books WHERE chamada LIKE ?";
+        
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + numChamada.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tblChamadaEmp.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     public void setDate() {//Configura a exibição das datas de empréstimo e devolução de exemplares.
 
         LocalDate dEmp = LocalDate.now();
@@ -87,6 +140,14 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         dataEmprestimo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         editarEmprestimo = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblUserEmp = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblChamadaEmp = new javax.swing.JTable();
+        idEmprestimo = new javax.swing.JTextField();
+        idUsuario = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -100,11 +161,21 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         jLabel3.setText("Nº de Chamada *");
 
         numChamada.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        numChamada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                numChamadaKeyReleased(evt);
+            }
+        });
 
         usuarioEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         usuarioEmprestimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usuarioEmprestimoActionPerformed(evt);
+            }
+        });
+        usuarioEmprestimo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                usuarioEmprestimoKeyReleased(evt);
             }
         });
 
@@ -165,7 +236,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         dataEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel6.setForeground(new java.awt.Color(255, 0, 0));
         jLabel6.setText("Campos marcados com  *  são obrigatórios");
 
         editarEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -175,6 +246,58 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                 editarEmprestimoActionPerformed(evt);
             }
         });
+
+        tblUserEmp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nome", "Série"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblUserEmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUserEmpMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblUserEmp);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("ID");
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("ID");
+
+        tblChamadaEmp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Título", "Autor", "Nº Chamada"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblChamadaEmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblChamadaEmpMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblChamadaEmp);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -191,34 +314,55 @@ public class Emprestimo extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usuarioEmprestimo)
-                            .addComponent(numChamada)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56)
+                                .addGap(146, 146, 146)
                                 .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(idEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(usuarioEmprestimo)
+                                    .addComponent(numChamada, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
+                                .addGap(28, 28, 28)
+                                .addComponent(idUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(169, 169, 169)
+                .addGap(166, 166, 166)
                 .addComponent(confirmarEmprestimo)
-                .addGap(48, 48, 48)
+                .addGap(47, 47, 47)
                 .addComponent(editarEmprestimo)
-                .addGap(48, 48, 48)
+                .addGap(49, 49, 49)
                 .addComponent(cancelarEmprestimo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,26 +372,34 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usuarioEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel7)
+                        .addComponent(idEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(usuarioEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel8)
+                        .addComponent(idUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirmarEmprestimo)
                     .addComponent(cancelarEmprestimo)
                     .addComponent(editarEmprestimo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -365,6 +517,28 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_usuarioEmprestimoActionPerformed
 
+    private void usuarioEmprestimoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioEmprestimoKeyReleased
+        pesquisarUsuarioNome();
+    }//GEN-LAST:event_usuarioEmprestimoKeyReleased
+
+    private void numChamadaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numChamadaKeyReleased
+        pesquisarLivroChamada();
+    }//GEN-LAST:event_numChamadaKeyReleased
+
+    private void tblChamadaEmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblChamadaEmpMouseClicked
+        if (tblChamadaEmp.getSelectedRow() != -1) {
+            idEmprestimo.setText(tblChamadaEmp.getValueAt(tblChamadaEmp.getSelectedRow(), 0).toString());
+            numChamada.setText(tblChamadaEmp.getValueAt(tblChamadaEmp.getSelectedRow(), 3).toString());
+        }
+    }//GEN-LAST:event_tblChamadaEmpMouseClicked
+
+    private void tblUserEmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserEmpMouseClicked
+        if (tblUserEmp.getSelectedRow() != -1) {
+            idUsuario.setText(tblUserEmp.getValueAt(tblUserEmp.getSelectedRow(), 0).toString());
+            usuarioEmprestimo.setText(tblUserEmp.getValueAt(tblUserEmp.getSelectedRow(), 1).toString());
+        }
+    }//GEN-LAST:event_tblUserEmpMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarEmprestimo;
@@ -372,15 +546,23 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     private javax.swing.JTextField dataDevolucao;
     private javax.swing.JTextField dataEmprestimo;
     private javax.swing.JButton editarEmprestimo;
+    private javax.swing.JTextField idEmprestimo;
+    private javax.swing.JTextField idUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField numChamada;
     private javax.swing.JTable tabelaEmprestimo;
+    private javax.swing.JTable tblChamadaEmp;
+    private javax.swing.JTable tblUserEmp;
     private javax.swing.JTextField usuarioEmprestimo;
     // End of variables declaration//GEN-END:variables
 }

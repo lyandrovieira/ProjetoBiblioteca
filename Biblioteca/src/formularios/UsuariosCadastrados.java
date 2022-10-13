@@ -1,10 +1,16 @@
 package formularios;
 
+import connection.ConnectionFactory;
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Usuarios;
 import model.dao.UsuariosDAO;
+import net.proteanit.sql.DbUtils;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -66,6 +72,24 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         }
     }
     
+    public void pesquisaGeralUsuario() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT id,nome,dataNasc,telefone,sexo,tipo,serie,endereco FROM tbl_users WHERE nome LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + txtPesqUsuario.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tblConsultUser.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     
     //NÃO APAGAR "private void initComponents().
@@ -73,7 +97,6 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         txtPesqUsuario = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         cancelarUser = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -84,12 +107,9 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(700, 600));
 
         txtPesqUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton1.setText("Pesquisar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        txtPesqUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesqUsuarioKeyReleased(evt);
             }
         });
 
@@ -140,21 +160,17 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPesqUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(272, 272, 272)
-                                .addComponent(jLabel1)))
-                        .addGap(0, 135, Short.MAX_VALUE))
+                        .addGap(272, 272, 272)
+                        .addComponent(jLabel1)
+                        .addGap(0, 266, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPesqUsuario)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(244, 244, 244)
@@ -171,8 +187,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtPesqUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(txtPesqUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -205,20 +220,14 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_excluirUsuarioActionPerformed
 
-    //Realiza pesquisa de usuário por nome.
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (txtPesqUsuario.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "Digite o Título desejado no campo de pesquisa.");
-            } else {
-                readJTableName(txtPesqUsuario.getText());
-            }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void txtPesqUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesqUsuarioKeyReleased
+        pesquisaGeralUsuario();
+    }//GEN-LAST:event_txtPesqUsuarioKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarUser;
     private javax.swing.JButton excluirUsuario;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

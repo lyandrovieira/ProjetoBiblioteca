@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.bean.Emprestimos;
+import model.bean.Usuarios;
 
 /**
  *

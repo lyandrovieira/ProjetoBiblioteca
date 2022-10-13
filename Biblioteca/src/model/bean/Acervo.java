@@ -14,6 +14,7 @@ public class Acervo {
     private String titulo;
     private String autor;
     private int exemplar;
+    private int exempDisp;
     private String volume;
     private int edicao;
     private String editora;
@@ -50,6 +51,14 @@ public class Acervo {
 
     public void setExemplar(int exemplar) {
         this.exemplar = exemplar;
+    }
+
+    public int getExempDisp() {
+        return exempDisp;
+    }
+
+    public void setExempDisp(int exempDisp) {
+        this.exempDisp = exempDisp;
     }
 
     public String getVolume() {
@@ -91,5 +100,7 @@ public class Acervo {
     public void setChamada(String chamada) {
         this.chamada = chamada;
     }
+
+    
     
 }

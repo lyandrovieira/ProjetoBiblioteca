@@ -1,10 +1,16 @@
 package formularios;
 
+import connection.ConnectionFactory;
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Devolucoes;
 import model.dao.DevolucaoDAO;
+import net.proteanit.sql.DbUtils;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -72,6 +78,25 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
             });
         }
     }
+    
+    public void pesquisaGeralDevolucao() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT id,numChamada,usuario,dataDev FROM tbl_dev WHERE numChamada LIKE ? OR usuario LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + pesqDevolucao.getText() + "%");
+            stmt.setString(2, "%" + pesqDevolucao.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tblConsultaDev.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     
@@ -83,10 +108,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         cancelDev = new javax.swing.JButton();
         lblLupaDev = new javax.swing.JLabel();
         pesqDevolucao = new javax.swing.JTextField();
-        btnPesqDevolucao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblConsultaDev = new javax.swing.JTable();
-        selecionarCategoria = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -102,15 +125,12 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         });
 
         lblLupaDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblLupaDev.setText("Categoria");
+        lblLupaDev.setText("Usuário ou Nº de Chamada");
 
         pesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        btnPesqDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnPesqDevolucao.setText("Pesquisar");
-        btnPesqDevolucao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesqDevolucaoActionPerformed(evt);
+        pesqDevolucao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pesqDevolucaoKeyReleased(evt);
             }
         });
 
@@ -131,9 +151,6 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tblConsultaDev);
-
-        selecionarCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        selecionarCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Nº de Chamada", "Usuário" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,11 +173,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(lblLupaDev)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pesqDevolucao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPesqDevolucao)))
+                        .addComponent(pesqDevolucao)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -171,9 +184,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLupaDev)
-                    .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesqDevolucao)
-                    .addComponent(selecionarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pesqDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -188,34 +199,17 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         doDefaultCloseAction();
     }//GEN-LAST:event_cancelDevActionPerformed
 
-    //Efetua pesquisa de devoluções no DB com base no critério de pesquisa selecionado.
-    private void btnPesqDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqDevolucaoActionPerformed
-        if (selecionarCategoria.getSelectedItem() == "Usuário") {
-            if (pesqDevolucao.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "Digite o Usuário desejado no campo de pesquisa.");
-            } else {
-                readJTableUsuario(pesqDevolucao.getText());
-            }
-        } else if (selecionarCategoria.getSelectedItem() == "Nº de Chamada") {
-            if (pesqDevolucao.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "Digite o Nº de Chamada desejado no campo de pesquisa.");
-            } else {
-                readJTableChamada(pesqDevolucao.getText());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma categoria para efetuar pesquisa.");
-        }
-    }//GEN-LAST:event_btnPesqDevolucaoActionPerformed
+    private void pesqDevolucaoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pesqDevolucaoKeyReleased
+        pesquisaGeralDevolucao();
+    }//GEN-LAST:event_pesqDevolucaoKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnPesqDevolucao;
     private javax.swing.JButton cancelDev;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLupaDev;
     private javax.swing.JTextField pesqDevolucao;
-    private javax.swing.JComboBox<String> selecionarCategoria;
     private javax.swing.JTable tblConsultaDev;
     // End of variables declaration//GEN-END:variables
 }

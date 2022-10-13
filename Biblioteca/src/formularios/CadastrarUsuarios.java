@@ -1,10 +1,16 @@
 package formularios;
 
+import connection.ConnectionFactory;
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Usuarios;
 import model.dao.UsuariosDAO;
+import net.proteanit.sql.DbUtils;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -47,8 +53,26 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         }
     }
 
+    public void pesquisaGeralUsuario() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT id,nome,dataNasc,telefone,sexo,tipo,serie,endereco FROM tbl_users WHERE nome LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "%" + nomeUsuario.getText() + "%");
+            rs = stmt.executeQuery();
+
+            tabelaUsuarios.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
-    
+
     //NÃO APAGAR "private void initComponents()".
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -86,6 +110,11 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         jLabel4.setText("Nome *");
 
         nomeUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        nomeUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nomeUsuarioKeyReleased(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Data Nascimento");
@@ -437,6 +466,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             selecionarTipo.setSelectedItem("Selecione");
             selecionarSerie.setSelectedItem("Selecione");
             selecionarSerie.setEnabled(false);
+            selecionarSexo.setSelectedItem("Selecione");
 
             readJTable();
         } else {
@@ -533,6 +563,10 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
             readJTable();
         }
     }//GEN-LAST:event_cadastrarUsuarioKeyPressed
+
+    private void nomeUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeUsuarioKeyReleased
+        pesquisaGeralUsuario();
+    }//GEN-LAST:event_nomeUsuarioKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

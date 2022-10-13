@@ -27,15 +27,16 @@ public class AcervoDAO {
 
         try {
 
-            stmt = con.prepareStatement("INSERT INTO tbl_books (titulo,autor,exemplar,volume,edicao,editora,ano_publi,chamada)VALUES(?,?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO tbl_books (titulo,autor,exemplar,exempDisponiveis,volume,edicao,editora,ano_publi,chamada)VALUES(?,?,?,?,?,?,?,?,?)");
             stmt.setString(1, a.getTitulo());
             stmt.setString(2, a.getAutor());
             stmt.setInt(3, a.getExemplar());
-            stmt.setString(4, a.getVolume());
-            stmt.setInt(5, a.getEdicao());
-            stmt.setString(6, a.getEditora());
-            stmt.setInt(7, a.getAno_publi());
-            stmt.setString(8, a.getChamada());
+            stmt.setInt(4, a.getExempDisp());
+            stmt.setString(5, a.getVolume());
+            stmt.setInt(6, a.getEdicao());
+            stmt.setString(7, a.getEditora());
+            stmt.setInt(8, a.getAno_publi());
+            stmt.setString(9, a.getChamada());
 
             stmt.executeUpdate();
 
@@ -68,6 +69,7 @@ public class AcervoDAO {
                 acervo.setTitulo(rs.getString("titulo"));
                 acervo.setAutor(rs.getString("autor"));
                 acervo.setExemplar(rs.getInt("exemplar"));
+                acervo.setExempDisp(rs.getInt("exempDisponiveis"));
                 acervo.setVolume(rs.getString("volume"));
                 acervo.setEdicao(rs.getInt("edicao"));
                 acervo.setEditora(rs.getString("editora"));
@@ -106,6 +108,7 @@ public class AcervoDAO {
                 acervo.setTitulo(rs.getString("titulo"));
                 acervo.setAutor(rs.getString("autor"));
                 acervo.setExemplar(rs.getInt("exemplar"));
+                acervo.setExempDisp(rs.getInt("exempDisponiveis"));
                 acervo.setVolume(rs.getString("volume"));
                 acervo.setEdicao(rs.getInt("edicao"));
                 acervo.setEditora(rs.getString("editora"));
@@ -144,6 +147,7 @@ public class AcervoDAO {
                 acervo.setTitulo(rs.getString("titulo"));
                 acervo.setAutor(rs.getString("autor"));
                 acervo.setExemplar(rs.getInt("exemplar"));
+                acervo.setExempDisp(rs.getInt("exempDisponiveis"));
                 acervo.setVolume(rs.getString("volume"));
                 acervo.setEdicao(rs.getInt("edicao"));
                 acervo.setEditora(rs.getString("editora"));
@@ -182,6 +186,7 @@ public class AcervoDAO {
                 acervo.setTitulo(rs.getString("titulo"));
                 acervo.setAutor(rs.getString("autor"));
                 acervo.setExemplar(rs.getInt("exemplar"));
+                acervo.setExempDisp(rs.getInt("exempDisponiveis"));
                 acervo.setVolume(rs.getString("volume"));
                 acervo.setEdicao(rs.getInt("edicao"));
                 acervo.setEditora(rs.getString("editora"));
@@ -207,7 +212,7 @@ public class AcervoDAO {
 
         try {
 
-            stmt = con.prepareStatement("UPDATE tbl_books SET titulo=?,autor=?,exemplar=?,volume=?,edicao=?,editora=?,ano_publi=?,chamada=? WHERE id=?");
+            stmt = con.prepareStatement("UPDATE tbl_books SET titulo=?,autor=?,exemplar=?,exempDisponiveis=?,volume=?,edicao=?,editora=?,ano_publi=?,chamada=? WHERE id=?");
             stmt.setString(1, a.getTitulo());
             stmt.setString(2, a.getAutor());
             stmt.setInt(3, a.getExemplar());
