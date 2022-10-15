@@ -53,6 +53,9 @@ public class Sobre extends javax.swing.JInternalFrame {
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setText("Voltar");
+        jButton1.setMaximumSize(new java.awt.Dimension(84, 24));
+        jButton1.setMinimumSize(new java.awt.Dimension(84, 24));
+        jButton1.setPreferredSize(new java.awt.Dimension(84, 24));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -74,7 +77,7 @@ public class Sobre extends javax.swing.JInternalFrame {
                             .addComponent(jLabel3)
                             .addGap(47, 47, 47)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(103, 103, 103)))
                 .addContainerGap(212, Short.MAX_VALUE))
         );
@@ -88,7 +91,7 @@ public class Sobre extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel2))
                 .addGap(15, 15, 15)
-                .addComponent(jButton1)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 

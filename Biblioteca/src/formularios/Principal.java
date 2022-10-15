@@ -25,7 +25,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void login() {
-        Connection con = ConnectionFactory.getConnection();
+        /*Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String sql = ("SELECT * FROM tbl_admins WHERE nome=? AND senha=?");
@@ -33,20 +33,23 @@ public class Principal extends javax.swing.JFrame {
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, usuarioLogin.getText());
-            stmt.setString(2, senhaLogin.getText());
+            String capturaSenha = new String(senhaLogin.getPassword());
+            stmt.setString(2, capturaSenha);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                JOptionPane.showMessageDialog(null, "Acesso Permitido!");
+                JOptionPane.showMessageDialog(null, "Acesso Permitido!");*/
                 TelaInicial inicial = new TelaInicial();
                 inicial.setVisible(true);
+                this.dispose();
+                /*con.close();
             } else {
                 JOptionPane.showMessageDialog(null, "Acesso negado! Senha e/ou usuário incorreto!");
             }
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
-        }
+        }*/
     }
 
     /**
@@ -107,7 +110,9 @@ public class Principal extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jButton1.setText("Ok");
-        jButton1.setPreferredSize(new java.awt.Dimension(84, 24));
+        jButton1.setMaximumSize(new java.awt.Dimension(91, 27));
+        jButton1.setMinimumSize(new java.awt.Dimension(91, 27));
+        jButton1.setPreferredSize(new java.awt.Dimension(91, 27));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -127,17 +132,18 @@ public class Principal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(senhaLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(usuarioLogin)))
+                        .addGap(16, 16, 16)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(usuarioLogin)
+                    .addComponent(senhaLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                 .addGap(28, 28, 28))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(67, 67, 67)

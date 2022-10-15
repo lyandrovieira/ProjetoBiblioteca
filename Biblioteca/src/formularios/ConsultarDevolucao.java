@@ -44,7 +44,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 dev.getId(),
                 dev.getNumChamada(),
                 dev.getUsuario(),
-                dev.getDataDev()
+                dev.getDataDev(),
+                dev.getSituacao()
             });
         }
     }
@@ -59,7 +60,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 dev.getId(),
                 dev.getNumChamada(),
                 dev.getUsuario(),
-                dev.getDataDev()
+                dev.getDataDev(),
+                dev.getSituacao()
             });
         }
     }
@@ -74,7 +76,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
                 dev.getId(),
                 dev.getNumChamada(),
                 dev.getUsuario(),
-                dev.getDataDev()
+                dev.getDataDev(),
+                dev.getSituacao()
             });
         }
     }
@@ -83,7 +86,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id,numChamada,usuario,dataDev FROM tbl_dev WHERE numChamada LIKE ? OR usuario LIKE ?";
+        String sql = "SELECT id,numChamada,usuario,dataDev,situacao FROM tbl_dev WHERE numChamada LIKE ? OR usuario LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);

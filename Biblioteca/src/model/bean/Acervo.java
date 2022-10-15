@@ -14,7 +14,7 @@ public class Acervo {
     private String titulo;
     private String autor;
     private int exemplar;
-    private int exempDisp;
+    private static int exempDisp;
     private String volume;
     private int edicao;
     private String editora;
@@ -53,7 +53,7 @@ public class Acervo {
         this.exemplar = exemplar;
     }
 
-    public int getExempDisp() {
+    public static int getExempDisp() {
         return exempDisp;
     }
 

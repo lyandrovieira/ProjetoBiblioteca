@@ -16,7 +16,6 @@ import net.proteanit.sql.DbUtils;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -33,60 +32,63 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
+
     public void readJTable() { //Exibe os dados de Empréstimo na JTable.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
-        
+
         EmprestimoDAO emp_dao = new EmprestimoDAO();
-        for(Emprestimos emps: emp_dao.read()) {
+        for (Emprestimos emps : emp_dao.read()) {
             tblConsultExemp.addRow(new Object[]{
                 emps.getId(),
                 emps.getNumChamada(),
                 emps.getUsuario(),
                 emps.getDataEmp(),
-                emps.getDataDev()
+                emps.getDataDev(),
+                emps.getSituacao()
             });
         }
     }
-    
+
     public void readJTableUsuario(String name) { //Exibe o resultado da pesquisa de empréstimo por usuário.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
-        
+
         EmprestimoDAO emp_dao = new EmprestimoDAO();
-        for(Emprestimos emps: emp_dao.readNome(name)) {
+        for (Emprestimos emps : emp_dao.readNome(name)) {
             tblConsultExemp.addRow(new Object[]{
                 emps.getId(),
                 emps.getNumChamada(),
                 emps.getUsuario(),
                 emps.getDataEmp(),
-                emps.getDataDev()
+                emps.getDataDev(),
+                emps.getSituacao()
             });
         }
     }
-    
+
     public void readJTableChamada(String code) { //Exibe o resultado da pesquisa de empréstimo por nº de chamada.
         DefaultTableModel tblConsultExemp = (DefaultTableModel) tblConsultaEmp.getModel();
         tblConsultExemp.setNumRows(0);
-        
+
         EmprestimoDAO emp_dao = new EmprestimoDAO();
-        for(Emprestimos emps: emp_dao.readChamada(code)) {
+        for (Emprestimos emps : emp_dao.readChamada(code)) {
             tblConsultExemp.addRow(new Object[]{
                 emps.getId(),
                 emps.getNumChamada(),
                 emps.getUsuario(),
                 emps.getDataEmp(),
-                emps.getDataDev()
+                emps.getDataDev(),
+                emps.getSituacao()
             });
         }
     }
-    
+
     public void pesquisaGeralEmprestimo() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id,numChamada,usuario,dataEmp,dataDev FROM tbl_emp WHERE numChamada LIKE ? OR usuario LIKE ?";
+        String sql = "SELECT id,numChamada,usuario,dataEmp,dataDev,situacao FROM tbl_emp WHERE numChamada LIKE ? OR usuario LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
@@ -100,7 +102,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -145,11 +147,11 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução"
+                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -14,6 +14,7 @@ public class Devolucoes {
     private String numChamada;
     private String usuario;
     private String dataDev;
+    private String situacao;
 
     public int getId() {
         return id;
@@ -46,6 +47,13 @@ public class Devolucoes {
     public void setDataDev(String dataDev) {
         this.dataDev = dataDev;
     }
-    
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
     
 }

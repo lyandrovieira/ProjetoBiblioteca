@@ -15,6 +15,7 @@ public class Emprestimos {
     private String usuario;
     private String dataEmp;
     private String dataDev;
+    private String situacao;
 
     public int getId() {
         return id;
@@ -55,6 +56,13 @@ public class Emprestimos {
     public void setDataDev(String dataDev) {
         this.dataDev = dataDev;
     }
-    
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
     
 }

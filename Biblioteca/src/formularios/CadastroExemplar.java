@@ -73,9 +73,9 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    
+
     //NÃO APAGAR "private void initComponents()".
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -144,7 +144,6 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
         cancelarCadastroExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cancelarCadastroExemplar.setText("Cancelar");
-        cancelarCadastroExemplar.setPreferredSize(new java.awt.Dimension(89, 24));
         cancelarCadastroExemplar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarCadastroExemplarActionPerformed(evt);
@@ -156,6 +155,16 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
         qtdExemplares.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         qtdExemplares.setPreferredSize(new java.awt.Dimension(320, 25));
+        qtdExemplares.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qtdExemplaresActionPerformed(evt);
+            }
+        });
+        qtdExemplares.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                qtdExemplaresKeyReleased(evt);
+            }
+        });
 
         volume.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         volume.setPreferredSize(new java.awt.Dimension(320, 25));
@@ -221,6 +230,9 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
         atualizaExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         atualizaExemplar.setText("Editar");
+        atualizaExemplar.setMaximumSize(new java.awt.Dimension(84, 24));
+        atualizaExemplar.setMinimumSize(new java.awt.Dimension(84, 24));
+        atualizaExemplar.setPreferredSize(new java.awt.Dimension(84, 24));
         atualizaExemplar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atualizaExemplarActionPerformed(evt);
@@ -239,9 +251,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         edicao.setPreferredSize(new java.awt.Dimension(320, 25));
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Exemplares Disponíveis *");
+        jLabel12.setText("Exemplares Disponíveis");
 
         qtdExemplaresDisponiveis.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        qtdExemplaresDisponiveis.setEnabled(false);
         qtdExemplaresDisponiveis.setPreferredSize(new java.awt.Dimension(320, 25));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -273,34 +286,38 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addGap(45, 45, 45)
-                                .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel8))
-                                .addGap(41, 41, 41)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(anoPublicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(268, 268, 268)
                                         .addComponent(jLabel9)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(166, 166, 166)
                                         .addComponent(jLabel11)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(edicao, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel7)
                                         .addGap(31, 31, 31)
-                                        .addComponent(editora, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                        .addComponent(editora, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(autor, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(anoPublicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 373, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(autor, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -308,7 +325,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(qtdExemplaresDisponiveis, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(qtdExemplaresDisponiveis, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                    .addComponent(campoPesquisaExemp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -321,16 +339,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                                 .addGap(172, 172, 172)
                                 .addComponent(cadastrarExemplar)
                                 .addGap(36, 36, 36)
-                                .addComponent(atualizaExemplar)
+                                .addComponent(atualizaExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(37, 37, 37)
-                                .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(campoPesquisaExemp, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(cancelarCadastroExemplar)))
+                        .addGap(0, 184, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -373,8 +385,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastrarExemplar)
-                    .addComponent(cancelarCadastroExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(atualizaExemplar))
+                    .addComponent(cancelarCadastroExemplar)
+                    .addComponent(atualizaExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -392,6 +404,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         if ((titulo.getText().isBlank()) || (autor.getText().isBlank()) || (qtdExemplares.getText().isBlank()) || (numChamada.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
+            qtdExemplaresDisponiveis.setText(qtdExemplares.getText());
+
             Acervo acervo = new Acervo();
             AcervoDAO dao = new AcervoDAO();
 
@@ -423,12 +437,12 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cadastrarExemplarActionPerformed
 
     private void atualizaExemplarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_atualizaExemplarKeyReleased
-
     }//GEN-LAST:event_atualizaExemplarKeyReleased
 
     private void atualizaExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizaExemplarActionPerformed
         //Atualizada os dados da linha selecionada no JTable.
         if (tabelaExemplares.getSelectedRow() != -1) {
+
             Acervo acervo = new Acervo();
             AcervoDAO dao = new AcervoDAO();
 
@@ -500,6 +514,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         if ((titulo.getText().isBlank()) || (autor.getText().isBlank()) || (qtdExemplares.getText().isBlank()) || (numChamada.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
+            qtdExemplaresDisponiveis.setText(qtdExemplares.getText());
+
             Acervo acervo = new Acervo();
             AcervoDAO dao = new AcervoDAO();
 
@@ -541,6 +557,14 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
     private void campoPesquisaExempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoPesquisaExempActionPerformed
     }//GEN-LAST:event_campoPesquisaExempActionPerformed
+
+    private void qtdExemplaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtdExemplaresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_qtdExemplaresActionPerformed
+
+    private void qtdExemplaresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_qtdExemplaresKeyReleased
+        //exemplaresInicial = qtdExemplares.getText();
+    }//GEN-LAST:event_qtdExemplaresKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

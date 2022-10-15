@@ -26,10 +26,11 @@ public class DevolucaoDAO {
 
         try {
 
-            stmt = con.prepareStatement("INSERT INTO tbl_dev (numChamada,usuario,dataDev)VALUES(?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO tbl_dev (numChamada,usuario,dataDev,situacao) VALUES(?,?,?,?)");
             stmt.setString(1, emps.getNumChamada());
             stmt.setString(2, emps.getUsuario());
             stmt.setString(3, emps.getDataDev());
+            stmt.setString(4, emps.getSituacao());
 
             stmt.executeUpdate();
 
@@ -61,6 +62,7 @@ public class DevolucaoDAO {
                 devs.setNumChamada(rs.getString("numChamada"));
                 devs.setUsuario(rs.getString("usuario"));
                 devs.setDataDev(rs.getString("dataDev"));
+                devs.setSituacao(rs.getString("situacao"));
                 
                 dev.add(devs);
             }
@@ -94,6 +96,7 @@ public class DevolucaoDAO {
                 devs.setNumChamada(rs.getString("numChamada"));
                 devs.setUsuario(rs.getString("usuario"));
                 devs.setDataDev(rs.getString("dataDev"));
+                devs.setSituacao(rs.getString("situacao"));
                 
                 dev.add(devs);
             }
@@ -127,6 +130,7 @@ public class DevolucaoDAO {
                 devs.setNumChamada(rs.getString("numChamada"));
                 devs.setUsuario(rs.getString("usuario"));
                 devs.setDataDev(rs.getString("dataDev"));
+                devs.setSituacao(rs.getString("situacao"));
                 
                 dev.add(devs);
             }
@@ -147,11 +151,12 @@ public class DevolucaoDAO {
 
         try {
 
-            stmt = con.prepareStatement("UPDATE tbl_dev SET numChamada=?,usuario=?,dataDev=? WHERE id=?");
+            stmt = con.prepareStatement("UPDATE tbl_dev SET numChamada=?,usuario=?,dataDev=?,situacao=? WHERE id=?");
             stmt.setString(1, dev.getNumChamada());
             stmt.setString(2, dev.getUsuario());
             stmt.setString(3, dev.getDataDev());
-            stmt.setInt(4, dev.getId());
+            stmt.setString(4, dev.getSituacao());
+            stmt.setInt(5, dev.getId());
 
             stmt.executeUpdate();
 

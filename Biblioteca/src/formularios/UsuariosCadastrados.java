@@ -147,6 +147,9 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
         excluirUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         excluirUsuario.setText("Excluir");
+        excluirUsuario.setMaximumSize(new java.awt.Dimension(84, 24));
+        excluirUsuario.setMinimumSize(new java.awt.Dimension(84, 24));
+        excluirUsuario.setPreferredSize(new java.awt.Dimension(84, 24));
         excluirUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 excluirUsuarioActionPerformed(evt);
@@ -174,7 +177,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(244, 244, 244)
-                .addComponent(excluirUsuario)
+                .addComponent(excluirUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(cancelarUser)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -193,7 +196,7 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarUser)
-                    .addComponent(excluirUsuario))
+                    .addComponent(excluirUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 

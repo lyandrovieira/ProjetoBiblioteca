@@ -45,6 +45,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 a.getTitulo(),
                 a.getAutor(),
                 a.getExemplar(),
+                a.getExempDisp(),
                 a.getVolume(),
                 a.getEdicao(),
                 a.getEditora(),
@@ -65,6 +66,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 a.getTitulo(),
                 a.getAutor(),
                 a.getExemplar(),
+                a.getExempDisp(),
                 a.getVolume(),
                 a.getEdicao(),
                 a.getEditora(),
@@ -85,6 +87,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 a.getTitulo(),
                 a.getAutor(),
                 a.getExemplar(),
+                a.getExempDisp(),
                 a.getVolume(),
                 a.getEdicao(),
                 a.getEditora(),
@@ -105,6 +108,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 a.getTitulo(),
                 a.getAutor(),
                 a.getExemplar(),
+                a.getExempDisp(),
                 a.getVolume(),
                 a.getEdicao(),
                 a.getEditora(),
@@ -118,7 +122,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id,titulo,autor,exemplar,volume,edicao,editora,ano_publi,chamada FROM tbl_books WHERE titulo LIKE ? OR autor LIKE ? OR chamada LIKE ?";
+        String sql = "SELECT id,titulo,autor,exemplar,exempDisponiveis,volume,edicao,editora,ano_publi,chamada FROM tbl_books WHERE titulo LIKE ? OR autor LIKE ? OR chamada LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
@@ -173,11 +177,11 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Título", "Autor", "Exemplares", "Exemplares Disponíveis", "Volume", "Editora", "Ano", "Nº de Chamada"
+                "ID", "Título", "Autor", "Exemplares", "Exemplares Disponíveis", "Volume", "Edição", "Editora", "Ano", "Nº de Chamada"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -193,6 +197,9 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
         excluirExemplar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         excluirExemplar.setText("Excluir");
+        excluirExemplar.setMaximumSize(new java.awt.Dimension(84, 24));
+        excluirExemplar.setMinimumSize(new java.awt.Dimension(84, 24));
+        excluirExemplar.setPreferredSize(new java.awt.Dimension(84, 24));
         excluirExemplar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 excluirExemplarActionPerformed(evt);
@@ -221,7 +228,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(242, 242, 242)
-                .addComponent(excluirExemplar)
+                .addComponent(excluirExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(jButton5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -240,7 +247,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
-                    .addComponent(excluirExemplar))
+                    .addComponent(excluirExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 

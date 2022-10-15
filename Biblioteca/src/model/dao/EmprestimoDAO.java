@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.bean.Emprestimos;
-import model.bean.Usuarios;
 
 /**
  *
@@ -28,11 +27,12 @@ public class EmprestimoDAO {
 
         try {
 
-            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev)VALUES(?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev,situacao)VALUES(?,?,?,?,?)");
             stmt.setString(1, emps.getNumChamada());
             stmt.setString(2, emps.getUsuario());
             stmt.setString(3, emps.getDataEmp());
             stmt.setString(4, emps.getDataDev());
+            stmt.setString(5, emps.getSituacao());
 
             stmt.executeUpdate();
 
@@ -65,6 +65,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setSituacao(rs.getString("situacao"));
                 
                 emp.add(emps);
             }
@@ -99,6 +100,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setSituacao(rs.getString("situacao"));
                 
                 emp.add(emps);
             }
@@ -133,6 +135,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setSituacao(rs.getString("situacao"));
                 
                 emp.add(emps);
             }
@@ -153,12 +156,13 @@ public class EmprestimoDAO {
 
         try {
 
-            stmt = con.prepareStatement("UPDATE tbl_emp SET numChamada=?,usuario=?,dataEmp=?,dataDev=? WHERE id=?");
+            stmt = con.prepareStatement("UPDATE tbl_emp SET numChamada=?,usuario=?,dataEmp=?,dataDev=?,situacao=? WHERE id=?");
             stmt.setString(1, empre.getNumChamada());
             stmt.setString(2, empre.getUsuario());
             stmt.setString(3, empre.getDataEmp());
             stmt.setString(4, empre.getDataDev());
-            stmt.setInt(5, empre.getId());
+            stmt.setString(5, "Em Circulação");
+            stmt.setInt(6, empre.getId());
 
             stmt.executeUpdate();
 

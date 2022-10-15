@@ -10,7 +10,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.bean.Acervo;
 import model.bean.Devolucoes;
+import model.bean.Emprestimos;
 import model.dao.DevolucaoDAO;
 import net.proteanit.sql.DbUtils;
 
@@ -25,6 +27,8 @@ import net.proteanit.sql.DbUtils;
  */
 public class Devolucao extends javax.swing.JInternalFrame {
 
+    private int incremento;
+    
     public Devolucao() {
         initComponents();
         readJTable();
@@ -47,7 +51,8 @@ public class Devolucao extends javax.swing.JInternalFrame {
                 dev.getId(),
                 dev.getNumChamada(),
                 dev.getUsuario(),
-                dev.getDataDev()
+                dev.getDataDev(),
+                dev.getSituacao()
             });
         }
     }
@@ -56,7 +61,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id, usuario, numChamada FROM tbl_emp WHERE usuario LIKE? AND numChamada LIKE ?";
+        String sql = "SELECT id, usuario, numChamada, situacao FROM tbl_emp WHERE usuario LIKE? AND numChamada LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
@@ -70,6 +75,43 @@ public class Devolucao extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
 
+    }
+    
+    public void alterarQtdExemplares() {
+        incremento = Acervo.getExempDisp() + 1;
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        String sql = "UPDATE tbl_books SET exempDisponiveis=? WHERE id LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, incremento);
+            stmt.setString(2, idEmprestimo.getText());
+            stmt.executeUpdate();
+
+            readJTable();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    public void alterarSitEmprestimo() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        String sql = "UPDATE tbl_emp SET situacao=? WHERE id LIKE ?";
+        
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "Devolvido");
+            stmt.setString(2, idEmprestimo.getText());
+            stmt.executeUpdate();
+            
+            readJTable();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
     
     public void setDate() { //Configura a exibição da data atual e seta como data na qual o exemplar foi devolvido.
@@ -102,6 +144,8 @@ public class Devolucao extends javax.swing.JInternalFrame {
         dataDevolucao = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDev = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        idEmprestimo = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -152,11 +196,11 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Devolução"
+                "ID", "Nº de Chamada", "Usuário", "Data Devolução", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -172,19 +216,19 @@ public class Devolucao extends javax.swing.JInternalFrame {
         dataDev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         dataDev.setText("Data Devolução");
 
-        dataDevolucao.setEditable(false);
         dataDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        dataDevolucao.setEnabled(false);
 
         tblDev.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Usuário", "Nº Chamada"
+                "ID", "Usuário", "Nº Chamada", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -198,6 +242,12 @@ public class Devolucao extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(tblDev);
 
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("ID");
+
+        idEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        idEmprestimo.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -205,22 +255,29 @@ public class Devolucao extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(usuarioDevolucao, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                            .addComponent(codigoDevolucao))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(usuarioDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(codigoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(idEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
                                 .addComponent(dataDev)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dataDevolucao, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)))))
+                                .addComponent(dataDevolucao))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -231,7 +288,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
                     .addComponent(jLabel4))
                 .addGap(233, 233, 233))
             .addGroup(layout.createSequentialGroup()
-                .addGap(243, 243, 243)
+                .addGap(240, 240, 240)
                 .addComponent(confirmarDevolucao)
                 .addGap(18, 18, 18)
                 .addComponent(cancelarDevolucao)
@@ -249,19 +306,24 @@ public class Devolucao extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
-                        .addComponent(codigoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(usuarioDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataDev)
-                    .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(codigoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(idEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(usuarioDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataDev))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirmarDevolucao)
                     .addComponent(cancelarDevolucao))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -277,14 +339,20 @@ public class Devolucao extends javax.swing.JInternalFrame {
         if ((usuarioDevolucao.getText().isBlank()) || (codigoDevolucao.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
+            String situacao = "Devolvido";
+            
             Devolucoes dev = new Devolucoes();
             DevolucaoDAO dao = new DevolucaoDAO();
 
             dev.setNumChamada(usuarioDevolucao.getText());
             dev.setUsuario(codigoDevolucao.getText());
             dev.setDataDev(dataDevolucao.getText());
+            dev.setSituacao(situacao);
 
             dao.create(dev);
+            
+            alterarQtdExemplares();
+            alterarSitEmprestimo();
 
             codigoDevolucao.setText(null);
             usuarioDevolucao.setText(null);
@@ -306,6 +374,8 @@ public class Devolucao extends javax.swing.JInternalFrame {
             dev.setDataDev(dataDevolucao.getText());
 
             dao.create(dev);
+            alterarQtdExemplares();
+            alterarSitEmprestimo();
 
             codigoDevolucao.setText(null);
             usuarioDevolucao.setText(null);
@@ -324,6 +394,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
     private void tblDevMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDevMouseClicked
         if (tblDev.getSelectedRow() != -1) {
+            idEmprestimo.setText(tblDev.getValueAt(tblDev.getSelectedRow(), 0).toString());
             usuarioDevolucao.setText(tblDev.getValueAt(tblDev.getSelectedRow(), 1).toString());
             codigoDevolucao.setText(tblDev.getValueAt(tblDev.getSelectedRow(), 2).toString());
         }
@@ -336,10 +407,12 @@ public class Devolucao extends javax.swing.JInternalFrame {
     private javax.swing.JButton confirmarDevolucao;
     private javax.swing.JLabel dataDev;
     private javax.swing.JTextField dataDevolucao;
+    private javax.swing.JTextField idEmprestimo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tabelaDevolucao;

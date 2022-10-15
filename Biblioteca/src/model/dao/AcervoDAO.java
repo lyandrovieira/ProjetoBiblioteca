@@ -216,12 +216,13 @@ public class AcervoDAO {
             stmt.setString(1, a.getTitulo());
             stmt.setString(2, a.getAutor());
             stmt.setInt(3, a.getExemplar());
-            stmt.setString(4, a.getVolume());
-            stmt.setInt(5, a.getEdicao());
-            stmt.setString(6, a.getEditora());
-            stmt.setInt(7, a.getAno_publi());
-            stmt.setString(8, a.getChamada());
-            stmt.setInt(9, a.getId());
+            stmt.setInt(4, a.getExempDisp());
+            stmt.setString(5, a.getVolume());
+            stmt.setInt(6, a.getEdicao());
+            stmt.setString(7, a.getEditora());
+            stmt.setInt(8, a.getAno_publi());
+            stmt.setString(9, a.getChamada());
+            stmt.setInt(10, a.getId());
 
             stmt.executeUpdate();
 
