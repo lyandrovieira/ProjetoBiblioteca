@@ -21,7 +21,7 @@ import net.proteanit.sql.DbUtils;
  * @author lyand
  */
 public class CadastroExemplar extends javax.swing.JInternalFrame {
-
+    
     public CadastroExemplar() {
         initComponents();
         readJTable();
@@ -73,7 +73,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
 
     //NÃO APAGAR "private void initComponents()".

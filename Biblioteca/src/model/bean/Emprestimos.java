@@ -16,6 +16,8 @@ public class Emprestimos {
     private String dataEmp;
     private String dataDev;
     private String situacao;
+    private int idLivro;
+    private int idUsuario;
 
     public int getId() {
         return id;
@@ -64,5 +66,22 @@ public class Emprestimos {
     public void setSituacao(String situacao) {
         this.situacao = situacao;
     }
+
+    public int getIdLivro() {
+        return idLivro;
+    }
+
+    public void setIdLivro(int idLivro) {
+        this.idLivro = idLivro;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
     
 }

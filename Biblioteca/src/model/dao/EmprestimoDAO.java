@@ -27,12 +27,14 @@ public class EmprestimoDAO {
 
         try {
 
-            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev,situacao)VALUES(?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev,situacao,idLivro,idUsuario) VALUES(?,?,?,?,?,?,?)");
             stmt.setString(1, emps.getNumChamada());
             stmt.setString(2, emps.getUsuario());
             stmt.setString(3, emps.getDataEmp());
             stmt.setString(4, emps.getDataDev());
             stmt.setString(5, emps.getSituacao());
+            stmt.setInt(6, emps.getIdLivro());
+            stmt.setInt(7, emps.getIdUsuario());
 
             stmt.executeUpdate();
 
@@ -66,6 +68,8 @@ public class EmprestimoDAO {
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
                 emps.setSituacao(rs.getString("situacao"));
+                emps.setIdLivro(rs.getInt("idLivro"));
+                emps.setIdUsuario(rs.getInt("idUsuario"));
                 
                 emp.add(emps);
             }
@@ -101,6 +105,8 @@ public class EmprestimoDAO {
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
                 emps.setSituacao(rs.getString("situacao"));
+                emps.setIdLivro(rs.getInt("idLivro"));
+                emps.setIdUsuario(rs.getInt("idUsuario"));
                 
                 emp.add(emps);
             }
@@ -136,6 +142,8 @@ public class EmprestimoDAO {
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
                 emps.setSituacao(rs.getString("situacao"));
+                emps.setIdLivro(rs.getInt("idLivro"));
+                emps.setIdUsuario(rs.getInt("idUsuario"));
                 
                 emp.add(emps);
             }
@@ -162,7 +170,9 @@ public class EmprestimoDAO {
             stmt.setString(3, empre.getDataEmp());
             stmt.setString(4, empre.getDataDev());
             stmt.setString(5, "Em Circulação");
-            stmt.setInt(6, empre.getId());
+            stmt.setInt(6, empre.getIdLivro());
+            stmt.setInt(7, empre.getIdUsuario());
+            stmt.setInt(8, empre.getId());
 
             stmt.executeUpdate();
 
