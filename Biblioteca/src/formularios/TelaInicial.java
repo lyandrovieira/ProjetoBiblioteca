@@ -4,7 +4,6 @@ package formularios;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -268,11 +267,6 @@ public class TelaInicial extends javax.swing.JFrame {
         consultdev.setPosicao();
         consultdev.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktoppanel;

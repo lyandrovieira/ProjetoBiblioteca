@@ -9,12 +9,13 @@ package model.bean;
  * @author lyand
  */
 public class Emprestimos {
-    
+
     private int id;
     private String numChamada;
     private String usuario;
     private String dataEmp;
     private String dataDev;
+    private String devolvido;
     private String situacao;
     private int idLivro;
     private int idUsuario;
@@ -59,6 +60,14 @@ public class Emprestimos {
         this.dataDev = dataDev;
     }
 
+    public String getDevolvido() {
+        return devolvido;
+    }
+
+    public void setDevolvido(String devolvido) {
+        this.devolvido = devolvido;
+    }
+
     public String getSituacao() {
         return situacao;
     }
@@ -83,5 +92,4 @@ public class Emprestimos {
         this.idUsuario = idUsuario;
     }
 
-    
 }

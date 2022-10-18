@@ -26,6 +26,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
     private int incremento;
     private int qtdExemp;
+    private String devolvido;
 
     public Devolucao() {
         initComponents();
@@ -59,12 +60,13 @@ public class Devolucao extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id, usuario, numChamada, idLivro, situacao FROM tbl_emp WHERE usuario LIKE? AND numChamada LIKE ?";
+        String sql = "SELECT id, usuario, numChamada, idLivro, situacao FROM tbl_emp WHERE usuario LIKE ? AND numChamada LIKE ? AND situacao LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, "%" + usuarioDevolucao.getText() + "%");
             stmt.setString(2, "%" + codigoDevolucao.getText() + "%");
+            stmt.setString(3, "Em Circulação");
             rs = stmt.executeQuery();
 
             tblDev.setModel(DbUtils.resultSetToTableModel(rs));
@@ -116,14 +118,19 @@ public class Devolucao extends javax.swing.JInternalFrame {
     }
 
     public void alterarSitEmprestimo() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        devolvido = today.format(formatador);
+        
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
-        String sql = "UPDATE tbl_emp SET situacao=? WHERE id LIKE ?";
+        String sql = "UPDATE tbl_emp SET situacao=?, devolvido=? WHERE id LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, "Devolvido");
-            stmt.setString(2, idEmprestimo.getText());
+            stmt.setString(2, devolvido);
+            stmt.setString(3, idEmprestimo.getText());
             stmt.executeUpdate();
 
             readJTable();
@@ -212,7 +219,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Devolução", "Situação"
+                "ID", "Nº de Chamada", "Usuário", "Devolvido em", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {

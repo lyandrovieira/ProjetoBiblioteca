@@ -27,14 +27,15 @@ public class EmprestimoDAO {
 
         try {
 
-            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev,situacao,idLivro,idUsuario) VALUES(?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO tbl_emp (numChamada,usuario,dataEmp,dataDev,devolvido,situacao,idLivro,idUsuario) VALUES(?,?,?,?,?,?,?,?)");
             stmt.setString(1, emps.getNumChamada());
             stmt.setString(2, emps.getUsuario());
             stmt.setString(3, emps.getDataEmp());
             stmt.setString(4, emps.getDataDev());
-            stmt.setString(5, emps.getSituacao());
-            stmt.setInt(6, emps.getIdLivro());
-            stmt.setInt(7, emps.getIdUsuario());
+            stmt.setString(5, emps.getDevolvido());
+            stmt.setString(6, emps.getSituacao());
+            stmt.setInt(7, emps.getIdLivro());
+            stmt.setInt(8, emps.getIdUsuario());
 
             stmt.executeUpdate();
 
@@ -67,6 +68,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setDevolvido(rs.getString("devolvido"));
                 emps.setSituacao(rs.getString("situacao"));
                 emps.setIdLivro(rs.getInt("idLivro"));
                 emps.setIdUsuario(rs.getInt("idUsuario"));
@@ -104,6 +106,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setDevolvido(rs.getString("devolvido"));
                 emps.setSituacao(rs.getString("situacao"));
                 emps.setIdLivro(rs.getInt("idLivro"));
                 emps.setIdUsuario(rs.getInt("idUsuario"));
@@ -141,6 +144,7 @@ public class EmprestimoDAO {
                 emps.setUsuario(rs.getString("usuario"));
                 emps.setDataEmp(rs.getString("dataEmp"));
                 emps.setDataDev(rs.getString("dataDev"));
+                emps.setDevolvido(rs.getString("devolvido"));
                 emps.setSituacao(rs.getString("situacao"));
                 emps.setIdLivro(rs.getInt("idLivro"));
                 emps.setIdUsuario(rs.getInt("idUsuario"));
@@ -164,15 +168,15 @@ public class EmprestimoDAO {
 
         try {
 
-            stmt = con.prepareStatement("UPDATE tbl_emp SET numChamada=?,usuario=?,dataEmp=?,dataDev=?,situacao=? WHERE id=?");
+            stmt = con.prepareStatement("UPDATE tbl_emp SET numChamada=?,usuario=? WHERE id=?");
             stmt.setString(1, empre.getNumChamada());
             stmt.setString(2, empre.getUsuario());
-            stmt.setString(3, empre.getDataEmp());
+            /*stmt.setString(3, empre.getDataEmp());
             stmt.setString(4, empre.getDataDev());
             stmt.setString(5, "Em Circulação");
             stmt.setInt(6, empre.getIdLivro());
-            stmt.setInt(7, empre.getIdUsuario());
-            stmt.setInt(8, empre.getId());
+            stmt.setInt(7, empre.getIdUsuario());*/
+            stmt.setInt(3, empre.getId());
 
             stmt.executeUpdate();
 

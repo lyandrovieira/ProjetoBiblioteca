@@ -200,7 +200,7 @@
                 <Column editable="false" title="ID" type="java.lang.Object"/>
                 <Column editable="false" title="N&#xba; de Chamada" type="java.lang.Object"/>
                 <Column editable="false" title="Usu&#xe1;rio" type="java.lang.Object"/>
-                <Column editable="false" title="Data Devolu&#xe7;&#xe3;o" type="java.lang.Object"/>
+                <Column editable="false" title="Devolvido em" type="java.lang.Object"/>
                 <Column editable="false" title="Situa&#xe7;&#xe3;o" type="java.lang.Object"/>
               </Table>
             </Property>

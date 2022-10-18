@@ -21,7 +21,12 @@ import net.proteanit.sql.DbUtils;
  * @author lyand
  */
 public class CadastroExemplar extends javax.swing.JInternalFrame {
-    
+
+    private int exempInicial;
+    private int exempFinal;
+    private int qtdDisp;
+    private int novaQtdDisp;
+
     public CadastroExemplar() {
         initComponents();
         readJTable();
@@ -73,7 +78,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
 
     //NÃO APAGAR "private void initComponents()".
@@ -442,14 +447,17 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     private void atualizaExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizaExemplarActionPerformed
         //Atualizada os dados da linha selecionada no JTable.
         if (tabelaExemplares.getSelectedRow() != -1) {
-
+            exempFinal = Integer.parseInt(qtdExemplares.getText());
+            qtdDisp = exempFinal - exempInicial;
+            novaQtdDisp = Integer.parseInt(qtdExemplaresDisponiveis.getText()) + qtdDisp;
+            
             Acervo acervo = new Acervo();
             AcervoDAO dao = new AcervoDAO();
 
             acervo.setTitulo(titulo.getText());
             acervo.setAutor(autor.getText());
             acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
-            acervo.setExempDisp(Integer.parseInt(qtdExemplaresDisponiveis.getText()));
+            acervo.setExempDisp(novaQtdDisp);
             acervo.setVolume(volume.getText());
             acervo.setEdicao(Integer.parseInt(edicao.getText()));
             acervo.setEditora(editora.getText());
@@ -490,6 +498,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 9).toString());
 
         }
+
+        exempInicial = Integer.parseInt(qtdExemplares.getText());
     }//GEN-LAST:event_tabelaExemplaresKeyReleased
 
     private void tabelaExemplaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaExemplaresMouseClicked
@@ -507,6 +517,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             numChamada.setText(tabelaExemplares.getValueAt(tabelaExemplares.getSelectedRow(), 9).toString());
 
         }
+
+        exempInicial = Integer.parseInt(qtdExemplares.getText());
     }//GEN-LAST:event_tabelaExemplaresMouseClicked
 
     private void numChamadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numChamadaActionPerformed

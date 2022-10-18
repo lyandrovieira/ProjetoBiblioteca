@@ -45,6 +45,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 emps.getUsuario(),
                 emps.getDataEmp(),
                 emps.getDataDev(),
+                emps.getDevolvido(),
                 emps.getSituacao()
             });
         }
@@ -62,6 +63,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 emps.getUsuario(),
                 emps.getDataEmp(),
                 emps.getDataDev(),
+                emps.getDevolvido(),
                 emps.getSituacao()
             });
         }
@@ -79,6 +81,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
                 emps.getUsuario(),
                 emps.getDataEmp(),
                 emps.getDataDev(),
+                emps.getDevolvido(),
                 emps.getSituacao()
             });
         }
@@ -88,7 +91,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id,numChamada,usuario,dataEmp,dataDev,situacao FROM tbl_emp WHERE numChamada LIKE ? OR usuario LIKE ?";
+        String sql = "SELECT id,numChamada,usuario,dataEmp,dataDev,devolvido,situacao FROM tbl_emp WHERE numChamada LIKE ? OR usuario LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
@@ -147,11 +150,11 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução", "Situação"
+                "ID", "Nº de Chamada", "Usuário", "Data Empréstimo", "Data Devolução", "Devolvido em", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
