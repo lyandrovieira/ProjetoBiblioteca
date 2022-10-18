@@ -60,13 +60,14 @@ public class Devolucao extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT id, usuario, numChamada, idLivro, situacao FROM tbl_emp WHERE usuario LIKE ? AND numChamada LIKE ? AND situacao LIKE ?";
+        String sql = "SELECT id, usuario, numChamada, idLivro, situacao FROM tbl_emp WHERE usuario LIKE ? AND numChamada LIKE ? AND (situacao LIKE ? OR situacao LIKE ?)";
 
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, "%" + usuarioDevolucao.getText() + "%");
             stmt.setString(2, "%" + codigoDevolucao.getText() + "%");
             stmt.setString(3, "Em Circulação");
+            stmt.setString(4, "Em Atraso");
             rs = stmt.executeQuery();
 
             tblDev.setModel(DbUtils.resultSetToTableModel(rs));
@@ -117,7 +118,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
         }
     }
 
-    public void alterarSitEmprestimo() {
+    public void alterarSitEmprestimoDevolucao() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         devolvido = today.format(formatador);
@@ -389,7 +390,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             pegarQtdExempDisp();
             alterarQtdExemplares();
-            alterarSitEmprestimo();
+            alterarSitEmprestimoDevolucao();
 
             codigoDevolucao.setText(null);
             usuarioDevolucao.setText(null);
@@ -421,7 +422,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             pegarQtdExempDisp();
             alterarQtdExemplares();
-            alterarSitEmprestimo();
+            alterarSitEmprestimoDevolucao();
 
             codigoDevolucao.setText(null);
             usuarioDevolucao.setText(null);

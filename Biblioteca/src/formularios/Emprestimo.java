@@ -24,18 +24,20 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     //private String chamada;
     private int decremento;
     private int qtdExemp;
+    private int qtdTotExemp;
     private int idLiv;
     private int idUse;
-    private String idBookOld;
-    private String idBookNew;
+    private int idEmp;
     private ResultSet data;
-    private String dataEmp;
     private String dataDev;
+    private LocalDate dataDevol;
+    private LocalDate hj;
 
     public Emprestimo() {
         initComponents();
         setDate();
         situacaoEmprestimo.setText("Em Circulação");
+        getData();
         readJTable();
         setClosable(true);
     }
@@ -124,6 +126,27 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         return qtdExemp;
     }
 
+    public int pegarQtdTotalExemp() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmtQtdExemp = null;
+        ResultSet resultado = null;
+        String sqlQtdExemp = "SELECT exemplar FROM tbl_books WHERE id LIKE ?";
+
+        try {
+            stmtQtdExemp = con.prepareStatement(sqlQtdExemp);
+            stmtQtdExemp.setString(1, idBook.getText());
+            resultado = stmtQtdExemp.executeQuery();
+
+            if (resultado != null && resultado.next()) {
+                qtdTotExemp = resultado.getInt("exemplar");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao obter quantidade de exemplares: " + ex);
+        }
+        return qtdTotExemp;
+    }
+
     public void alterarQtdExemplares() {
         decremento = qtdExemp - 1;
         Connection con = ConnectionFactory.getConnection();
@@ -187,32 +210,54 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         idUsuario.setText(Integer.toString(idUse));
     }
 
-    /*public void getData() {
+    public void alterarSitEmprestimoAtraso() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
-        String sql = "SELECT dataEmp,dataDev FROM tbl_emp";
-        
-        try{
+        String sql = "UPDATE tbl_emp SET situacao=? WHERE id LIKE ?";
+
+        try {
             stmt = con.prepareStatement(sql);
-            data = stmt.executeQuery();
-            
-            if (data != null && data.next()) {
-                dataEmp = data.getString("dataEmp");
-                dataDev = data.getString("dataDev");
-            }
-            
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate hj = LocalDate.now();
-            LocalDate dataHoje = LocalDate.parse(dataHoje, formatter);
-            LocalDate dataDevolucao = LocalDate.parse(dataDev, formatter);
-            
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar datas: "+ex);
+            stmt.setString(1, "Em Atraso");
+            stmt.setInt(2, idEmp);
+            stmt.executeUpdate();
+
+            readJTable();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
         }
-    }*/
- /*public void verificarAtraso() {
-        
-    }*/
+    }
+
+    public void getData() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        hj = LocalDate.now();
+        hj.format(formatter);
+
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        String sql = "SELECT id,dataEmp,dataDev FROM tbl_emp WHERE situacao LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, "Em Circulação");
+            data = stmt.executeQuery();
+
+            while (data != null && data.next()) {
+                idEmp = data.getInt("id");
+                dataDev = data.getString("dataDev");
+                dataDevol = LocalDate.parse(dataDev, formatter);
+
+                if (hj.compareTo(dataDevol) > 0) {
+                    alterarSitEmprestimoAtraso();
+                }
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar datas: " + ex);
+        }
+
+    }
+
     public void setDate() {//Configura a exibição das datas de empréstimo e devolução de exemplares.
 
         LocalDate dEmp = LocalDate.now();
@@ -564,36 +609,41 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
     //Confirma o empréstimo de exemplar ao clicar no botão de confirmação.
     private void confirmarEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarEmprestimoActionPerformed
-        //chamada = numChamada.getText();
+        pegarQtdTotalExemp();
+        pegarQtdExempDisp();
         if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            Emprestimos emprestimo = new Emprestimos();
-            EmprestimoDAO dao = new EmprestimoDAO();
+            if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
+                Emprestimos emprestimo = new Emprestimos();
+                EmprestimoDAO dao = new EmprestimoDAO();
 
-            emprestimo.setNumChamada(numChamada.getText());
-            emprestimo.setUsuario(usuarioEmprestimo.getText());
-            emprestimo.setDataEmp(dataEmprestimo.getText());
-            emprestimo.setDataDev(dataDevolucao.getText());
-            emprestimo.setDevolvido(dataDevolucao.getText());
-            emprestimo.setSituacao(situacaoEmprestimo.getText());
-            emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-            emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                emprestimo.setNumChamada(numChamada.getText());
+                emprestimo.setUsuario(usuarioEmprestimo.getText());
+                emprestimo.setDataEmp(dataEmprestimo.getText());
+                emprestimo.setDataDev(dataDevolucao.getText());
+                emprestimo.setDevolvido("");
+                emprestimo.setSituacao(situacaoEmprestimo.getText());
+                emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-            dao.create(emprestimo);
+                dao.create(emprestimo);
 
-            pegarQtdExempDisp();
-            alterarQtdExemplares();
+                //pegarQtdExempDisp();
+                alterarQtdExemplares();
 
-            numChamada.setText(null);
-            usuarioEmprestimo.setText(null);
-            idBook.setText(null);
-            idUsuario.setText(null);
+                numChamada.setText(null);
+                usuarioEmprestimo.setText(null);
+                idBook.setText(null);
+                idUsuario.setText(null);
 
-            ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-            ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+                ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
 
-            readJTable();
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
+            }
         }
     }//GEN-LAST:event_confirmarEmprestimoActionPerformed
 
@@ -616,6 +666,8 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
             numChamada.setText(null);
             usuarioEmprestimo.setText(null);
+            idBook.setText(null);
+            idUsuario.setText(null);
 
             readJTable();
 
