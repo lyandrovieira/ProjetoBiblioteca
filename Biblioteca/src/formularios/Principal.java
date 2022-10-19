@@ -24,6 +24,7 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
     }
 
+    //Verifica se administrador está cadastrado no BD. Se estiver, é liberado o acesso à Tela Inicial.
     public void login() {
         /*Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -49,6 +50,8 @@ public class Principal extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }*/
     }
 

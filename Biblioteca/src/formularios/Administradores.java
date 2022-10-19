@@ -11,7 +11,6 @@ import model.dao.AdminsDAO;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -29,7 +28,7 @@ public class Administradores extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
+
     public void readJTable() { //Exibe os dados do DB na JTable.
         DefaultTableModel tblAdmins = (DefaultTableModel) tabelaAdmin.getModel();
         tblAdmins.setNumRows(0);
@@ -43,10 +42,9 @@ public class Administradores extends javax.swing.JInternalFrame {
             });
         }
     }
-    
-    
-    @SuppressWarnings("unchecked") 
-    
+
+    @SuppressWarnings("unchecked")
+
     //NÃO ALTERAR O 'private void initComponents()'.
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -241,28 +239,28 @@ public class Administradores extends javax.swing.JInternalFrame {
         if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else if (Arrays.equals(senha, confSenha)) {
-            
+
             Admins admin = new Admins();
             AdminsDAO dao = new AdminsDAO();
-            
+
             admin.setNome(usuarioAdmin.getText());
             admin.setSenha(senhaAdmin.getText());
             admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
-            
+
             dao.create(admin);
-            
+
             usuarioAdmin.setText(null);
             senhaAdmin.setText(null);
             confirmarSenha.setText(null);
             selecionarOcupacao.setSelectedItem("Selecione");
-            
+
             readJTable();
 
         } else {
             JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
         }
     }//GEN-LAST:event_cadastrarAdminActionPerformed
-    
+
 // Exclui adminitradores registrados.
     private void excluirAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAdminActionPerformed
         if (tabelaAdmin.getSelectedRow() != -1) {

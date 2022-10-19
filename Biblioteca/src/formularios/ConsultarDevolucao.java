@@ -16,7 +16,6 @@ import net.proteanit.sql.DbUtils;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -33,7 +32,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
+
     public void readJTable() { //Exibe os dados de devolução na JTable.
         DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
         tblUsers.setNumRows(0);
@@ -49,7 +48,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
     public void readJTableUsuario(String name) { //Exibe o resultado da pesquisa por Usuário.
         DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
         tblUsers.setNumRows(0);
@@ -65,7 +64,7 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
     public void readJTableChamada(String code) { //Exibe o resultado da pesquisa por número de chamada.
         DefaultTableModel tblUsers = (DefaultTableModel) tblConsultaDev.getModel();
         tblUsers.setNumRows(0);
@@ -81,7 +80,8 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
+    //Efetua pesquisa de devolução por número de chamada ou usuário.
     public void pesquisaGeralDevolucao() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -96,13 +96,15 @@ public class ConsultarDevolucao extends javax.swing.JInternalFrame {
 
             tblConsultaDev.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar devoluções: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
 
     @SuppressWarnings("unchecked")
-    
+
     //NÃO APAGAR "private void initComponents".
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

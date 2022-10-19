@@ -87,6 +87,7 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
         }
     }
 
+    //Efetua pesquisa de empréstimo por nome.
     public void pesquisaGeralEmprestimo() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -101,8 +102,10 @@ public class ConsultarEmprestimo extends javax.swing.JInternalFrame {
 
             tblConsultaEmp.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar empréstimo: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
 

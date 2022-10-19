@@ -16,7 +16,6 @@ import net.proteanit.sql.DbUtils;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-
 /**
  *
  * @author lyand
@@ -33,13 +32,13 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
-    
+
     public void readJTable() { //Exibe os usuários cadastrados na JTable.
         DefaultTableModel tblUsers = (DefaultTableModel) tblConsultUser.getModel();
         tblUsers.setNumRows(0);
-        
+
         UsuariosDAO u_dao = new UsuariosDAO();
-        for(Usuarios u: u_dao.read()) {
+        for (Usuarios u : u_dao.read()) {
             tblUsers.addRow(new Object[]{
                 u.getId(),
                 u.getNome(),
@@ -52,13 +51,13 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
     public void readJTableName(String name) { //Exibe o resultado da pesquisa de usuários por nome.
         DefaultTableModel tblUsers = (DefaultTableModel) tblConsultUser.getModel();
         tblUsers.setNumRows(0);
-        
+
         UsuariosDAO u_dao = new UsuariosDAO();
-        for(Usuarios u: u_dao.readNome(name)) {
+        for (Usuarios u : u_dao.readNome(name)) {
             tblUsers.addRow(new Object[]{
                 u.getId(),
                 u.getNome(),
@@ -71,7 +70,8 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
             });
         }
     }
-    
+
+    //Pesquisa usuário por nome.
     public void pesquisaGeralUsuario() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -85,13 +85,15 @@ public class UsuariosCadastrados extends javax.swing.JInternalFrame {
 
             tblConsultUser.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    
+
     //NÃO APAGAR "private void initComponents().
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -21,14 +21,12 @@ import model.dao.EmprestimoDAO;
  */
 public class Emprestimo extends javax.swing.JInternalFrame {
 
-    //private String chamada;
     private int decremento;
     private int qtdExemp;
     private int qtdTotExemp;
     private int idLiv;
     private int idUse;
     private int idEmp;
-    private ResultSet data;
     private String dataDev;
     private LocalDate dataDevol;
     private LocalDate hj;
@@ -67,6 +65,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         }
     }
 
+    //Pesquisa de usuário, por nome, para preencher tabela auxiliar.
     public void pesquisarUsuarioNome() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -80,12 +79,14 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
             tblUserEmp.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
-
     }
 
+    //Pesquisa de exemplar, por número de chamada, para preencher tabela auxiliar.
     public void pesquisarLivroChamada() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -99,12 +100,14 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
             tblChamadaEmp.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar exemplar: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
-
     }
 
+    //Obtém a quantidade de exemplares disponíveis para empréstimo.
     public int pegarQtdExempDisp() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmtQtdExemp = null;
@@ -122,10 +125,13 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao obter quantidade de exemplares: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmtQtdExemp, resultado);
         }
         return qtdExemp;
     }
 
+    //Obtém a quantidade total de exemplares registrados para o livro pesquisado.
     public int pegarQtdTotalExemp() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmtQtdExemp = null;
@@ -143,10 +149,13 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao obter quantidade de exemplares: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmtQtdExemp, resultado);
         }
         return qtdTotExemp;
     }
 
+    //Altera a quantidade de exemplares disponíveis ao efetuar um empréstimo.
     public void alterarQtdExemplares() {
         decremento = qtdExemp - 1;
         Connection con = ConnectionFactory.getConnection();
@@ -163,28 +172,12 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao subtrair exemplar: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
         }
     }
 
-    public void alterarQtdExemplaresEdicao() {
-        decremento = qtdExemp - 1;
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        String sql = "UPDATE tbl_books SET exempDisponiveis=? WHERE id LIKE ?";
-
-        try {
-            stmt = con.prepareStatement(sql);
-            stmt.setInt(1, decremento);
-            stmt.setString(2, idBook.getText());
-            stmt.executeUpdate();
-
-            readJTable();
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao subtrair exemplar: " + ex);
-        }
-    }
-
+    //Atualiza, ao clicar na tabela principal do formulário de cadastro de empréstimo, os índices de usuário e exemplar.
     public void ajustarIndicesEmp() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -210,6 +203,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         idUsuario.setText(Integer.toString(idUse));
     }
 
+    //Atribui situação "Em Atraso" para empréstimos atrasados.
     public void alterarSitEmprestimoAtraso() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -223,11 +217,14 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
             readJTable();
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar situação do empréstimo: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
         }
     }
 
+    //Obtém e analisa a data de empréstimo e a data atual para verificar se existe atraso.
     public void getData() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         hj = LocalDate.now();
@@ -235,6 +232,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
+        ResultSet data = null;
         String sql = "SELECT id,dataEmp,dataDev FROM tbl_emp WHERE situacao LIKE ?";
 
         try {
@@ -253,7 +251,9 @@ public class Emprestimo extends javax.swing.JInternalFrame {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar datas: " + ex);
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar e analisar datas: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, data);
         }
 
     }

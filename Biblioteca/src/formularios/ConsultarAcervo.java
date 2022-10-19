@@ -118,6 +118,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         }
     }
 
+//Efetua pesquisa de exemplar por título, autor ou número de chamada. Útil para verificar se o exemplar possui cadastro diretamente na tela de cadastro.
     public void pesquisaAcervoGeral() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -133,13 +134,15 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
             tabelaConsulExemplares.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar exemplar: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    
+
     //NÃO APAGAR "private void initComponents();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -257,7 +260,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         doDefaultCloseAction();
     }//GEN-LAST:event_jButton5ActionPerformed
-    
+
     //Exclui exemplares do DB.
     private void excluirExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirExemplarActionPerformed
         if (tabelaConsulExemplares.getSelectedRow() != -1) {

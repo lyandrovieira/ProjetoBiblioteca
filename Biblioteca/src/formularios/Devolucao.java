@@ -56,6 +56,7 @@ public class Devolucao extends javax.swing.JInternalFrame {
         }
     }
 
+    //Efeuta pesquisa de empréstimo para devolução.
     public void pesquisarEmprestimo() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -72,12 +73,15 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             tblDev.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar empréstimo: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
 
     }
 
+    //Obtém a qtd de exemplares disponíveis para empréstimo.
     public int pegarQtdExempDisp() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmtQtdExemp = null;
@@ -94,11 +98,14 @@ public class Devolucao extends javax.swing.JInternalFrame {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao obter quantidade de exemplares: " + ex);
+            JOptionPane.showMessageDialog(null, "Erro ao obter quantidade de exemplares disponíveis: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmtQtdExemp, resultado);
         }
         return qtdExemp;
     }
 
+    //Altera a qtd de exemplares disponíveis ao efetuar devolução.
     public void alterarQtdExemplares() {
         incremento = qtdExemp + 1;
         Connection con = ConnectionFactory.getConnection();
@@ -115,14 +122,17 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao adicionar exemplar: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
         }
     }
 
+    //Altera a situação do empréstimo para "Devolvido"
     public void alterarSitEmprestimoDevolucao() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         devolvido = today.format(formatador);
-        
+
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         String sql = "UPDATE tbl_emp SET situacao=?, devolvido=? WHERE id LIKE ?";
@@ -136,8 +146,8 @@ public class Devolucao extends javax.swing.JInternalFrame {
 
             readJTable();
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao alterar situação do empréstimo: " + ex);
         }
     }
 

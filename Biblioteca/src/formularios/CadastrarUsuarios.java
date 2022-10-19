@@ -53,6 +53,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         }
     }
 
+    //Efetua pesquisa de usuário por nome. Útil para verificar se o usuário possui cadastro diretamente na tela de cadastro.
     public void pesquisaGeralUsuario() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -66,8 +67,10 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
 
             tabelaUsuarios.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
 
@@ -598,7 +601,7 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cadastrarUsuarioKeyPressed
 
     private void nomeUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeUsuarioKeyReleased
-        
+
     }//GEN-LAST:event_nomeUsuarioKeyReleased
 
     private void campoPesquisaUserKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoPesquisaUserKeyReleased

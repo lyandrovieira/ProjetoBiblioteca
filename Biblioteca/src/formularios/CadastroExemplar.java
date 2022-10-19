@@ -59,7 +59,8 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         }
     }
 
-    public void lerUsuarioEmprestimo() {
+    //Efetua pesquisa de exemplar por título, autor ou número de chamada. Útil para verificar se o exemplar possui cadastro diretamente na tela de cadastro.
+    public void pesquisaGeralExemplar() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -74,8 +75,10 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
 
             tabelaExemplares.setModel(DbUtils.resultSetToTableModel(rs));
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar exemplar: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
     }
 
@@ -450,7 +453,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
             exempFinal = Integer.parseInt(qtdExemplares.getText());
             qtdDisp = exempFinal - exempInicial;
             novaQtdDisp = Integer.parseInt(qtdExemplaresDisponiveis.getText()) + qtdDisp;
-            
+
             Acervo acervo = new Acervo();
             AcervoDAO dao = new AcervoDAO();
 
@@ -561,7 +564,7 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tituloKeyReleased
 
     private void campoPesquisaExempKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoPesquisaExempKeyReleased
-        lerUsuarioEmprestimo();
+        pesquisaGeralExemplar();
     }//GEN-LAST:event_campoPesquisaExempKeyReleased
 
     private void tituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tituloActionPerformed
