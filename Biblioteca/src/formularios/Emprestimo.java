@@ -285,7 +285,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         dataDevolucao = new javax.swing.JTextField();
         dataEmprestimo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        editarEmprestimo = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblUserEmp = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
@@ -390,17 +389,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 0, 0));
         jLabel6.setText("Campos marcados com  *  são obrigatórios");
-
-        editarEmprestimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        editarEmprestimo.setText("Editar");
-        editarEmprestimo.setMaximumSize(new java.awt.Dimension(84, 24));
-        editarEmprestimo.setMinimumSize(new java.awt.Dimension(84, 24));
-        editarEmprestimo.setPreferredSize(new java.awt.Dimension(84, 24));
-        editarEmprestimo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarEmprestimoActionPerformed(evt);
-            }
-        });
 
         tblUserEmp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -509,19 +497,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(situacaoEmprestimo))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(11, 11, 11)
                                 .addComponent(numChamada, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(4, 4, 4)
@@ -537,24 +512,34 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(confirmarEmprestimo)
+                                        .addGap(44, 44, 44)
+                                        .addComponent(cancelarEmprestimo)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(situacaoEmprestimo))))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(56, 56, 56)
                         .addComponent(usuarioEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(166, 166, 166)
-                .addComponent(confirmarEmprestimo)
-                .addGap(47, 47, 47)
-                .addComponent(editarEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(cancelarEmprestimo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -593,8 +578,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirmarEmprestimo)
-                    .addComponent(cancelarEmprestimo)
-                    .addComponent(editarEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancelarEmprestimo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -629,7 +613,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
                 dao.create(emprestimo);
 
-                //pegarQtdExempDisp();
                 alterarQtdExemplares();
 
                 numChamada.setText(null);
@@ -646,37 +629,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_confirmarEmprestimoActionPerformed
-
-    //Edita os dados de empréstimo da linha selecionado no JTable.
-    private void editarEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarEmprestimoActionPerformed
-        if (tabelaEmprestimo.getSelectedRow() != -1) {
-            Emprestimos emprestimo = new Emprestimos();
-            EmprestimoDAO dao = new EmprestimoDAO();
-
-            emprestimo.setNumChamada(numChamada.getText());
-            emprestimo.setUsuario(usuarioEmprestimo.getText());
-            emprestimo.setDataEmp(dataEmprestimo.getText());
-            emprestimo.setDataDev(dataDevolucao.getText());
-            emprestimo.setSituacao(situacaoEmprestimo.getText());
-            emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-            emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
-            emprestimo.setId((int) tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0));
-
-            dao.update(emprestimo);
-
-            numChamada.setText(null);
-            usuarioEmprestimo.setText(null);
-            idBook.setText(null);
-            idUsuario.setText(null);
-
-            readJTable();
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione um Empréstimo para atualizar.");
-        }
-
-
-    }//GEN-LAST:event_editarEmprestimoActionPerformed
 
     //Seleciona linha da JTable.
     private void tabelaEmprestimoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEmprestimoKeyReleased
@@ -775,7 +727,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     private javax.swing.JButton confirmarEmprestimo;
     private javax.swing.JTextField dataDevolucao;
     private javax.swing.JTextField dataEmprestimo;
-    private javax.swing.JButton editarEmprestimo;
     private javax.swing.JTextField idBook;
     private javax.swing.JTextField idEmprestimo;
     private javax.swing.JTextField idUsuario;

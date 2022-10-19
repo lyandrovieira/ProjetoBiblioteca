@@ -161,35 +161,6 @@ public class EmprestimoDAO {
         return emp;
     }
     
-    public void update(Emprestimos empre) { //Atualiza os dados de empréstimo no DB.
-
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-
-        try {
-
-            stmt = con.prepareStatement("UPDATE tbl_emp SET numChamada=?,usuario=? WHERE id=?");
-            stmt.setString(1, empre.getNumChamada());
-            stmt.setString(2, empre.getUsuario());
-            /*stmt.setString(3, empre.getDataEmp());
-            stmt.setString(4, empre.getDataDev());
-            stmt.setString(5, "Em Circulação");
-            stmt.setInt(6, empre.getIdLivro());
-            stmt.setInt(7, empre.getIdUsuario());*/
-            stmt.setInt(3, empre.getId());
-
-            stmt.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-
-    }
-    
     public void delete(Emprestimos empre) { //Deleta dados de empréstimo no DB.
 
         Connection con = ConnectionFactory.getConnection();
