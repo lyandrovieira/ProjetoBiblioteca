@@ -26,7 +26,7 @@ public class Principal extends javax.swing.JFrame {
 
     //Verifica se administrador está cadastrado no BD. Se estiver, é liberado o acesso à Tela Inicial.
     public void login() {
-        /*Connection con = ConnectionFactory.getConnection();
+        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String sql = ("SELECT * FROM tbl_admins WHERE nome=? AND senha=?");
@@ -39,11 +39,11 @@ public class Principal extends javax.swing.JFrame {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                JOptionPane.showMessageDialog(null, "Acesso Permitido!");*/
+                JOptionPane.showMessageDialog(null, "Acesso Permitido!");
                 TelaInicial inicial = new TelaInicial();
                 inicial.setVisible(true);
                 this.dispose();
-                /*con.close();
+                con.close();
             } else {
                 JOptionPane.showMessageDialog(null, "Acesso negado! Senha e/ou usuário incorreto!");
             }
@@ -52,7 +52,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt, rs);
-        }*/
+        }
     }
 
     /**

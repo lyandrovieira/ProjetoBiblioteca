@@ -422,28 +422,43 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         if (nomeUsuario.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            Usuarios users = new Usuarios();
-            UsuariosDAO dao = new UsuariosDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar cadastro de usuário?", "Cadastro de Usuário", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            users.setNome(nomeUsuario.getText());
-            users.setDataNasc(dataNascimento.getText());
-            users.setTelefone(telefone.getText());
-            users.setSexo(selecionarSexo.getSelectedItem().toString());
-            users.setTipo(selecionarTipo.getSelectedItem().toString());
-            users.setSerie(selecionarSerie.getSelectedItem().toString());
-            users.setEndereco(enderecoUsuario.getText());
+            if (input == 0) {
+                Usuarios users = new Usuarios();
+                UsuariosDAO dao = new UsuariosDAO();
 
-            dao.create(users);
+                users.setNome(nomeUsuario.getText());
+                users.setDataNasc(dataNascimento.getText());
+                users.setTelefone(telefone.getText());
+                users.setSexo(selecionarSexo.getSelectedItem().toString());
+                users.setTipo(selecionarTipo.getSelectedItem().toString());
+                users.setSerie(selecionarSerie.getSelectedItem().toString());
+                users.setEndereco(enderecoUsuario.getText());
 
-            nomeUsuario.setText(null);
-            dataNascimento.setText(null);
-            telefone.setText(null);
-            enderecoUsuario.setText(null);
-            selecionarTipo.setSelectedItem("Selecione");
-            selecionarSerie.setSelectedItem("Selecione");
-            selecionarSerie.setEnabled(false);
+                dao.create(users);
 
-            readJTable();
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+                selecionarSexo.setSelectedItem("Selecione");
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cadastro Cancelado!");
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+                selecionarSexo.setSelectedItem("Selecione");
+            }
         }
 
     }//GEN-LAST:event_cadastrarUsuarioActionPerformed
@@ -481,30 +496,44 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
     private void atualizarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarUserActionPerformed
         //Atualiza os dados do usuário selecionado na JTable.
         if (tabelaUsuarios.getSelectedRow() != -1) {
-            Usuarios users = new Usuarios();
-            UsuariosDAO dao = new UsuariosDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar atualização de dados de usuário?", "Atualização  de Usuário", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            users.setNome(nomeUsuario.getText());
-            users.setDataNasc(dataNascimento.getText());
-            users.setTelefone(telefone.getText());
-            users.setSexo(selecionarSexo.getSelectedItem().toString());
-            users.setTipo(selecionarTipo.getSelectedItem().toString());
-            users.setSerie(selecionarSerie.getSelectedItem().toString());
-            users.setEndereco(enderecoUsuario.getText());
-            users.setId((int) tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 0));
+            if (input == 0) {
+                Usuarios users = new Usuarios();
+                UsuariosDAO dao = new UsuariosDAO();
 
-            dao.update(users);
+                users.setNome(nomeUsuario.getText());
+                users.setDataNasc(dataNascimento.getText());
+                users.setTelefone(telefone.getText());
+                users.setSexo(selecionarSexo.getSelectedItem().toString());
+                users.setTipo(selecionarTipo.getSelectedItem().toString());
+                users.setSerie(selecionarSerie.getSelectedItem().toString());
+                users.setEndereco(enderecoUsuario.getText());
+                users.setId((int) tabelaUsuarios.getValueAt(tabelaUsuarios.getSelectedRow(), 0));
 
-            nomeUsuario.setText(null);
-            dataNascimento.setText(null);
-            telefone.setText(null);
-            enderecoUsuario.setText(null);
-            selecionarTipo.setSelectedItem("Selecione");
-            selecionarSerie.setSelectedItem("Selecione");
-            selecionarSerie.setEnabled(false);
-            selecionarSexo.setSelectedItem("Selecione");
+                dao.update(users);
 
-            readJTable();
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+                selecionarSexo.setSelectedItem("Selecione");
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Atualização Cancelada!");
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+                selecionarSexo.setSelectedItem("Selecione");
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um usuário para atualizar.");
         }

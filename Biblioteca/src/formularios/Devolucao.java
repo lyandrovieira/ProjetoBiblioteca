@@ -386,30 +386,40 @@ public class Devolucao extends javax.swing.JInternalFrame {
         if ((usuarioDevolucao.getText().isBlank()) || (codigoDevolucao.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            String situacao = "Devolvido";
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar cadastro de usuário?", "Cadastro de Usuário", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            Devolucoes dev = new Devolucoes();
-            DevolucaoDAO dao = new DevolucaoDAO();
+            if (input == 0) {
+                String situacao = "Devolvido";
 
-            dev.setNumChamada(usuarioDevolucao.getText());
-            dev.setUsuario(codigoDevolucao.getText());
-            dev.setDataDev(dataDevolucao.getText());
-            dev.setSituacao(situacao);
+                Devolucoes dev = new Devolucoes();
+                DevolucaoDAO dao = new DevolucaoDAO();
 
-            dao.create(dev);
+                dev.setNumChamada(usuarioDevolucao.getText());
+                dev.setUsuario(codigoDevolucao.getText());
+                dev.setDataDev(dataDevolucao.getText());
+                dev.setSituacao(situacao);
 
-            pegarQtdExempDisp();
-            alterarQtdExemplares();
-            alterarSitEmprestimoDevolucao();
+                dao.create(dev);
 
-            codigoDevolucao.setText(null);
-            usuarioDevolucao.setText(null);
-            idEmprestimo.setText(null);
-            idExemplar.setText(null);
+                pegarQtdExempDisp();
+                alterarQtdExemplares();
+                alterarSitEmprestimoDevolucao();
 
-            ((DefaultTableModel) tblDev.getModel()).setRowCount(0);
+                codigoDevolucao.setText(null);
+                usuarioDevolucao.setText(null);
+                idEmprestimo.setText(null);
+                idExemplar.setText(null);
 
-            readJTable();
+                ((DefaultTableModel) tblDev.getModel()).setRowCount(0);
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Devolução Cancelada!");
+                codigoDevolucao.setText(null);
+                usuarioDevolucao.setText(null);
+                idEmprestimo.setText(null);
+                idExemplar.setText(null);
+            }
         }
     }//GEN-LAST:event_confirmarDevolucaoActionPerformed
 

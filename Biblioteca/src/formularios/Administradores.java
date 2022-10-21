@@ -1,8 +1,15 @@
 package formularios;
 
+import connection.ConnectionFactory;
+import java.sql.*;
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Arrays;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Admins;
 import model.dao.AdminsDAO;
@@ -16,6 +23,10 @@ import model.dao.AdminsDAO;
  * @author lyand
  */
 public class Administradores extends javax.swing.JInternalFrame {
+
+    private boolean autenticacao;
+    private String senhaDigitada;
+    JPasswordField pass = new JPasswordField();
 
     public Administradores() {
         initComponents();
@@ -41,6 +52,28 @@ public class Administradores extends javax.swing.JInternalFrame {
                 u.getOcupacao()
             });
         }
+    }
+
+    public boolean verificarSenha() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT senha FROM tbl_admins WHERE senha LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, senhaDigitada);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                autenticacao = true;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao validar senha de usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return autenticacao;
     }
 
     @SuppressWarnings("unchecked")
@@ -154,21 +187,22 @@ public class Administradores extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3))
+                                        .addGap(8, 8, 8)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(confirmarSenha)
+                                    .addComponent(senhaAdmin)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(selecionarOcupacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(confirmarSenha)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(8, 8, 8)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(senhaAdmin)
                                     .addComponent(usuarioAdmin))))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -238,45 +272,79 @@ public class Administradores extends javax.swing.JInternalFrame {
         char[] confSenha = confirmarSenha.getPassword();
         if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
-        } else if (Arrays.equals(senha, confSenha)) {
-
-            Admins admin = new Admins();
-            AdminsDAO dao = new AdminsDAO();
-
-            admin.setNome(usuarioAdmin.getText());
-            admin.setSenha(senhaAdmin.getText());
-            admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
-
-            dao.create(admin);
-
-            usuarioAdmin.setText(null);
-            senhaAdmin.setText(null);
-            confirmarSenha.setText(null);
-            selecionarOcupacao.setSelectedItem("Selecione");
-
-            readJTable();
-
         } else {
-            JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
+            if (Arrays.equals(senha, confSenha)) {
+                int input = JOptionPane.showConfirmDialog(null, "Para incluir um novo Administrador, é necessário a autenticação de Administrador já cadastrado. Continuar?", "Incluir Administrador", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                if (input == 0) {
+                    JLabel digSenha = new JLabel("Digite sua senha de usuário:");
+                    JOptionPane.showConfirmDialog(null,
+                            new Object[]{digSenha, pass}, "Senha",
+                            JOptionPane.OK_CANCEL_OPTION);
+
+                    senhaDigitada = new String(pass.getPassword());
+
+                    verificarSenha();
+
+                    if (autenticacao == true) {
+                        Admins admin = new Admins();
+                        AdminsDAO dao = new AdminsDAO();
+
+                        admin.setNome(usuarioAdmin.getText());
+                        admin.setSenha(senhaAdmin.getText());
+                        admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
+
+                        dao.create(admin);
+
+                        usuarioAdmin.setText(null);
+                        senhaAdmin.setText(null);
+                        confirmarSenha.setText(null);
+                        selecionarOcupacao.setSelectedItem("Selecione");
+
+                        //JOptionPane.showMessageDialog(null, "Novo administrador cadastrado com sucesso!");
+                        readJTable();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Autorização inválida. Verifique os dados inseridos.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
+            }
         }
     }//GEN-LAST:event_cadastrarAdminActionPerformed
 
 // Exclui adminitradores registrados.
     private void excluirAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAdminActionPerformed
         if (tabelaAdmin.getSelectedRow() != -1) {
-            Admins admin = new Admins();
-            AdminsDAO dao = new AdminsDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Para excluir um exemplar, é necessário confirmação com senha", "Excluir Exemplar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            admin.setId((int) tabelaAdmin.getValueAt(tabelaAdmin.getSelectedRow(), 0));
+            if (input == 0) {
+                JLabel digSenha = new JLabel("Digite sua senha de usuário:");
+                JOptionPane.showConfirmDialog(null,
+                        new Object[]{digSenha, pass}, "Senha",
+                        JOptionPane.OK_CANCEL_OPTION);
 
-            dao.delete(admin);
+                senhaDigitada = new String(pass.getPassword());
 
-            usuarioAdmin.setText(null);
-            senhaAdmin.setText(null);
-            confirmarSenha.setText(null);
-            selecionarOcupacao.setSelectedItem(null);
+                verificarSenha();
 
-            readJTable();
+                if (autenticacao == true) {
+                    Admins admin = new Admins();
+                    AdminsDAO dao = new AdminsDAO();
+
+                    admin.setId((int) tabelaAdmin.getValueAt(tabelaAdmin.getSelectedRow(), 0));
+
+                    dao.delete(admin);
+
+                    usuarioAdmin.setText(null);
+                    senhaAdmin.setText(null);
+                    confirmarSenha.setText(null);
+                    selecionarOcupacao.setSelectedItem(null);
+
+                    readJTable();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Autorização inválida. Verifique os dados inseridos.");
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um exemplar para excluir.");
         }

@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Acervo;
 import model.dao.AcervoDAO;
@@ -21,6 +23,10 @@ import net.proteanit.sql.DbUtils;
  * @author lyand
  */
 public class ConsultarAcervo extends javax.swing.JInternalFrame {
+
+    private boolean autenticacao;
+    private String senhaDigitada;
+    JPasswordField pass = new JPasswordField();
 
     public ConsultarAcervo() {
         initComponents();
@@ -139,6 +145,28 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         } finally {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
+    }
+
+    public boolean verificarSenha() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT senha FROM tbl_admins WHERE senha LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, senhaDigitada);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                autenticacao = true;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao validar senha de usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return autenticacao;
     }
 
     @SuppressWarnings("unchecked")
@@ -264,14 +292,31 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     //Exclui exemplares do DB.
     private void excluirExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirExemplarActionPerformed
         if (tabelaConsulExemplares.getSelectedRow() != -1) {
-            Acervo acervo = new Acervo();
-            AcervoDAO dao = new AcervoDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Para excluir um exemplar, é necessário confirmação com senha", "Excluir Exemplar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            acervo.setId((int) tabelaConsulExemplares.getValueAt(tabelaConsulExemplares.getSelectedRow(), 0));
+            if (input == 0) {
+                JLabel digSenha = new JLabel("Digite sua senha de usuário:");
+                JOptionPane.showConfirmDialog(null,
+                        new Object[]{digSenha, pass}, "Senha",
+                        JOptionPane.OK_CANCEL_OPTION);
 
-            dao.delete(acervo);
+                senhaDigitada = new String(pass.getPassword());
 
-            readJTable();
+                verificarSenha();
+
+                if (autenticacao == true) {
+                    Acervo acervo = new Acervo();
+                    AcervoDAO dao = new AcervoDAO();
+
+                    acervo.setId((int) tabelaConsulExemplares.getValueAt(tabelaConsulExemplares.getSelectedRow(), 0));
+
+                    dao.delete(acervo);
+
+                    readJTable();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Autorização inválida. Verifique os dados inseridos.");
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um exemplar para excluir.");
         }
