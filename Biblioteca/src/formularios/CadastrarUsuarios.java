@@ -574,28 +574,41 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         if (nomeUsuario.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            Usuarios users = new Usuarios();
-            UsuariosDAO dao = new UsuariosDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar cadastro de usuário?", "Cadastro de Usuário", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            users.setNome(nomeUsuario.getText());
-            users.setDataNasc(dataNascimento.getText());
-            users.setTelefone(telefone.getText());
-            users.setSexo(selecionarSexo.getSelectedItem().toString());
-            users.setTipo(selecionarTipo.getSelectedItem().toString());
-            users.setSerie(selecionarSerie.getSelectedItem().toString());
-            users.setEndereco(enderecoUsuario.getText());
+            if (input == 0) {
+                Usuarios users = new Usuarios();
+                UsuariosDAO dao = new UsuariosDAO();
 
-            dao.create(users);
+                users.setNome(nomeUsuario.getText());
+                users.setDataNasc(dataNascimento.getText());
+                users.setTelefone(telefone.getText());
+                users.setSexo(selecionarSexo.getSelectedItem().toString());
+                users.setTipo(selecionarTipo.getSelectedItem().toString());
+                users.setSerie(selecionarSerie.getSelectedItem().toString());
+                users.setEndereco(enderecoUsuario.getText());
 
-            nomeUsuario.setText(null);
-            dataNascimento.setText(null);
-            telefone.setText(null);
-            enderecoUsuario.setText(null);
-            selecionarTipo.setSelectedItem("Selecione");
-            selecionarSerie.setSelectedItem("Selecione");
-            selecionarSerie.setEnabled(false);
+                dao.create(users);
 
-            readJTable();
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cadastro Cancelado!");
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+            }
         }
     }//GEN-LAST:event_enderecoUsuarioActionPerformed
 
@@ -604,28 +617,41 @@ public class CadastrarUsuarios extends javax.swing.JInternalFrame {
         if (nomeUsuario.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            Usuarios users = new Usuarios();
-            UsuariosDAO dao = new UsuariosDAO();
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar cadastro de usuário?", "Cadastro de Usuário", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            users.setNome(nomeUsuario.getText());
-            users.setDataNasc(dataNascimento.getText());
-            users.setTelefone(telefone.getText());
-            users.setSexo(selecionarSexo.getSelectedItem().toString());
-            users.setTipo(selecionarTipo.getSelectedItem().toString());
-            users.setSerie(selecionarSerie.getSelectedItem().toString());
-            users.setEndereco(enderecoUsuario.getText());
+            if (input == 0) {
+                Usuarios users = new Usuarios();
+                UsuariosDAO dao = new UsuariosDAO();
 
-            dao.create(users);
+                users.setNome(nomeUsuario.getText());
+                users.setDataNasc(dataNascimento.getText());
+                users.setTelefone(telefone.getText());
+                users.setSexo(selecionarSexo.getSelectedItem().toString());
+                users.setTipo(selecionarTipo.getSelectedItem().toString());
+                users.setSerie(selecionarSerie.getSelectedItem().toString());
+                users.setEndereco(enderecoUsuario.getText());
 
-            nomeUsuario.setText(null);
-            dataNascimento.setText(null);
-            telefone.setText(null);
-            enderecoUsuario.setText(null);
-            selecionarTipo.setSelectedItem("Selecione");
-            selecionarSerie.setSelectedItem("Selecione");
-            selecionarSerie.setEnabled(false);
+                dao.create(users);
 
-            readJTable();
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cadastro Cancelado!");
+                nomeUsuario.setText(null);
+                dataNascimento.setText(null);
+                telefone.setText(null);
+                enderecoUsuario.setText(null);
+                selecionarTipo.setSelectedItem("Selecione");
+                selecionarSerie.setSelectedItem("Selecione");
+                selecionarSerie.setEnabled(false);
+            }
         }
     }//GEN-LAST:event_cadastrarUsuarioKeyPressed
 
