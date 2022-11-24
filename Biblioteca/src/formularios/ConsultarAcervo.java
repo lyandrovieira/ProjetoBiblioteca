@@ -30,6 +30,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
     public ConsultarAcervo() {
         initComponents();
+        pesquisaTotalExemplares();
         readJTable();
         setClosable(true);
 
@@ -168,6 +169,38 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         }
         return autenticacao;
     }
+    
+    public void pesquisaTotalExemplares() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt1 = null;
+        PreparedStatement stmt2 = null;
+        ResultSet rs1 = null;
+        ResultSet rs2 = null;
+        String sql1 = "SELECT SUM(exemplar) FROM tbl_books";
+        String sql2 = "SELECT SUM(exempDisponiveis) FROM tbl_books";
+
+        try {
+            stmt1 = con.prepareStatement(sql1);
+            rs1 = stmt1.executeQuery();
+            
+            if (rs1 != null && rs1.next()) {
+                totAcervo.setText(String.valueOf(rs1.getInt(1)));
+            }
+            
+            stmt2 = con.prepareStatement(sql2);
+            rs2 = stmt2.executeQuery();
+            
+            if (rs2 != null && rs2.next()) {
+                totDisponivel.setText(String.valueOf(rs2.getInt(1)));
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao obter total de exemplares: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt1, rs1);
+            ConnectionFactory.closeConnection(con, stmt2, rs2);
+        }
+    }
 
     @SuppressWarnings("unchecked")
 
@@ -182,6 +215,10 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         tabelaConsulExemplares = new javax.swing.JTable();
         excluirExemplar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        totDisponivel = new javax.swing.JTextField();
+        totAcervo = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -240,29 +277,53 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Título, Autor ou Nº de Chamada");
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setText("Total Acervo");
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setText("Total Disponível");
+
+        totDisponivel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        totDisponivel.setEnabled(false);
+
+        totAcervo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        totAcervo.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(275, 275, 275)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(275, 275, 275)
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPesqExemplar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesqExemplar)))
+                        .addGap(242, 242, 242)
+                        .addComponent(excluirExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jButton5)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(242, 242, 242)
-                .addComponent(excluirExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jButton5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(totAcervo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totDisponivel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(165, 165, 165))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,8 +334,14 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtPesqExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(totDisponivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(totAcervo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
@@ -336,8 +403,12 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaConsulExemplares;
+    private javax.swing.JTextField totAcervo;
+    private javax.swing.JTextField totDisponivel;
     private javax.swing.JTextField txtPesqExemplar;
     // End of variables declaration//GEN-END:variables
 }
