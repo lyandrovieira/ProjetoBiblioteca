@@ -559,34 +559,49 @@ public class CadastroExemplar extends javax.swing.JInternalFrame {
         if ((titulo.getText().isBlank()) || (autor.getText().isBlank()) || (qtdExemplares.getText().isBlank()) || (numChamada.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            qtdExemplaresDisponiveis.setText(qtdExemplares.getText());
+            int input = JOptionPane.showConfirmDialog(null, "Confirmar cadastro de exemplar?", "Cadastro de Exemplar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            Acervo acervo = new Acervo();
-            AcervoDAO dao = new AcervoDAO();
+            if (input == 0) {
+                qtdExemplaresDisponiveis.setText(qtdExemplares.getText());
 
-            acervo.setTitulo(titulo.getText());
-            acervo.setAutor(autor.getText());
-            acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
-            acervo.setExempDisp(Integer.parseInt(qtdExemplaresDisponiveis.getText()));
-            acervo.setVolume(volume.getText());
-            acervo.setEdicao(Integer.parseInt(edicao.getText()));
-            acervo.setEditora(editora.getText());
-            acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
-            acervo.setChamada(numChamada.getText());
+                Acervo acervo = new Acervo();
+                AcervoDAO dao = new AcervoDAO();
 
-            dao.create(acervo);
+                acervo.setTitulo(titulo.getText());
+                acervo.setAutor(autor.getText());
+                acervo.setExemplar(Integer.parseInt(qtdExemplares.getText()));
+                acervo.setExempDisp(Integer.parseInt(qtdExemplaresDisponiveis.getText()));
+                acervo.setVolume(volume.getText());
+                acervo.setEdicao(Integer.parseInt(edicao.getText()));
+                acervo.setEditora(editora.getText());
+                acervo.setAno_publi(Integer.parseInt(anoPublicacao.getText()));
+                acervo.setChamada(numChamada.getText());
 
-            titulo.setText(null);
-            autor.setText(null);
-            qtdExemplares.setText(null);
-            qtdExemplaresDisponiveis.setText(null);
-            volume.setText(null);
-            edicao.setText(null);
-            editora.setText(null);
-            anoPublicacao.setText(null);
-            numChamada.setText(null);
+                dao.create(acervo);
 
-            readJTable();
+                titulo.setText(null);
+                autor.setText(null);
+                qtdExemplares.setText(null);
+                qtdExemplaresDisponiveis.setText(null);
+                volume.setText(null);
+                edicao.setText(null);
+                editora.setText(null);
+                anoPublicacao.setText(null);
+                numChamada.setText(null);
+
+                readJTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cadastro Cancelado!");
+                titulo.setText(null);
+                autor.setText(null);
+                qtdExemplares.setText(null);
+                qtdExemplaresDisponiveis.setText(null);
+                volume.setText(null);
+                edicao.setText(null);
+                editora.setText(null);
+                anoPublicacao.setText(null);
+                numChamada.setText(null);
+            }
         }
     }//GEN-LAST:event_numChamadaActionPerformed
 
