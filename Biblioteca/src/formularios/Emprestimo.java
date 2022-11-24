@@ -668,36 +668,50 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
     //Confirma o empréstimo de exemplar ao clicar ENTER.
     private void usuarioEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioEmprestimoActionPerformed
-        //chamada = numChamada.getText();
+        pegarQtdTotalExemp();
+        pegarQtdExempDisp();
         if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            Emprestimos emprestimo = new Emprestimos();
-            EmprestimoDAO dao = new EmprestimoDAO();
+            if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
+                int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            emprestimo.setNumChamada(numChamada.getText());
-            emprestimo.setUsuario(usuarioEmprestimo.getText());
-            emprestimo.setDataEmp(dataEmprestimo.getText());
-            emprestimo.setDataDev(dataDevolucao.getText());
-            emprestimo.setDevolvido(dataDevolucao.getText());
-            emprestimo.setSituacao(situacaoEmprestimo.getText());
-            emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-            emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                if (input == 0) {
+                    Emprestimos emprestimo = new Emprestimos();
+                    EmprestimoDAO dao = new EmprestimoDAO();
 
-            dao.create(emprestimo);
+                    emprestimo.setNumChamada(numChamada.getText());
+                    emprestimo.setUsuario(usuarioEmprestimo.getText());
+                    emprestimo.setDataEmp(dataEmprestimo.getText());
+                    emprestimo.setDataDev(dataDevolucao.getText());
+                    emprestimo.setDevolvido("");
+                    emprestimo.setSituacao(situacaoEmprestimo.getText());
+                    emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                    emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-            pegarQtdExempDisp();
-            alterarQtdExemplares();
+                    dao.create(emprestimo);
 
-            numChamada.setText(null);
-            usuarioEmprestimo.setText(null);
-            idBook.setText(null);
-            idUsuario.setText(null);
+                    alterarQtdExemplares();
 
-            ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-            ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+                    numChamada.setText(null);
+                    usuarioEmprestimo.setText(null);
+                    idBook.setText(null);
+                    idUsuario.setText(null);
 
-            readJTable();
+                    ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                    ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+
+                    readJTable();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
+                    numChamada.setText(null);
+                    usuarioEmprestimo.setText(null);
+                    idBook.setText(null);
+                    idUsuario.setText(null);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
+            }
         }
     }//GEN-LAST:event_usuarioEmprestimoActionPerformed
 
