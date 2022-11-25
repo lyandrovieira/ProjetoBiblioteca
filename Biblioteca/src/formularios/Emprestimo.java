@@ -27,9 +27,13 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     private int idLiv;
     private int idUse;
     private int idEmp;
+    private int idPesquisado;
+    private int numeroLinhas;
+    private int linhas;
     private String dataDev;
     private LocalDate dataDevol;
     private LocalDate hj;
+    private boolean empValido;
 
     public Emprestimo() {
         initComponents();
@@ -267,6 +271,36 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         dataDevolucao.setText(dDev.format(formatador));
     }
 
+    //Verifica se o usuário já possui empréstimo pendente para o mesmo exemplar que dejesa retirar.
+    //Se possuir, o empréstimo é negado.
+    public boolean verificaEmpRepetido() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM tbl_emp WHERE idUsuario LIKE ? AND idLivro LIKE ? AND (situacao LIKE ? OR situacao LIKE ?)";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, Integer.valueOf(idUsuario.getText()));
+            stmt.setInt(2, Integer.valueOf(idBook.getText()));
+            stmt.setString(3, "Em Circulação");
+            stmt.setString(4, "Em Atraso");
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                empValido = false;
+            } else {
+                empValido = true;
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar empréstimos ativos do Usuário:" + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return empValido;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -442,7 +476,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(tblChamadaEmp);
         if (tblChamadaEmp.getColumnModel().getColumnCount() > 0) {
-            tblChamadaEmp.getColumnModel().getColumn(0).setResizable(false);
+            tblChamadaEmp.getColumnModel().getColumn(4).setResizable(false);
         }
 
         idBook.setEnabled(false);
@@ -602,31 +636,36 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                 int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
                 if (input == 0) {
-                    Emprestimos emprestimo = new Emprestimos();
-                    EmprestimoDAO dao = new EmprestimoDAO();
+                    verificaEmpRepetido();
+                    if (empValido) {
+                        Emprestimos emprestimo = new Emprestimos();
+                        EmprestimoDAO dao = new EmprestimoDAO();
 
-                    emprestimo.setNumChamada(numChamada.getText());
-                    emprestimo.setUsuario(usuarioEmprestimo.getText());
-                    emprestimo.setDataEmp(dataEmprestimo.getText());
-                    emprestimo.setDataDev(dataDevolucao.getText());
-                    emprestimo.setDevolvido("");
-                    emprestimo.setSituacao(situacaoEmprestimo.getText());
-                    emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-                    emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                        emprestimo.setNumChamada(numChamada.getText());
+                        emprestimo.setUsuario(usuarioEmprestimo.getText());
+                        emprestimo.setDataEmp(dataEmprestimo.getText());
+                        emprestimo.setDataDev(dataDevolucao.getText());
+                        emprestimo.setDevolvido("");
+                        emprestimo.setSituacao(situacaoEmprestimo.getText());
+                        emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                        emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-                    dao.create(emprestimo);
+                        dao.create(emprestimo);
 
-                    alterarQtdExemplares();
+                        alterarQtdExemplares();
 
-                    numChamada.setText(null);
-                    usuarioEmprestimo.setText(null);
-                    idBook.setText(null);
-                    idUsuario.setText(null);
+                        numChamada.setText(null);
+                        usuarioEmprestimo.setText(null);
+                        idBook.setText(null);
+                        idUsuario.setText(null);
 
-                    ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-                    ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+                        ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                        ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
 
-                    readJTable();
+                        readJTable();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
                     numChamada.setText(null);
@@ -642,28 +681,12 @@ public class Emprestimo extends javax.swing.JInternalFrame {
 
     //Seleciona linha da JTable.
     private void tabelaEmprestimoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEmprestimoKeyReleased
-        if (tabelaEmprestimo.getSelectedRow() != -1) {
-            idEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0).toString());
-            numChamada.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 1).toString());
-            usuarioEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 2).toString());
-            dataEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 3).toString());
-            dataDevolucao.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 4).toString());
-            situacaoEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 5).toString());
-        }
-        ajustarIndicesEmp();
+        
     }//GEN-LAST:event_tabelaEmprestimoKeyReleased
 
     //Seleciona linha da JTable.
     private void tabelaEmprestimoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEmprestimoMouseClicked
-        if (tabelaEmprestimo.getSelectedRow() != -1) {
-            idEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0).toString());
-            numChamada.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 1).toString());
-            usuarioEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 2).toString());
-            dataEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 3).toString());
-            dataDevolucao.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 4).toString());
-            situacaoEmprestimo.setText(tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 6).toString());
-        }
-        ajustarIndicesEmp();
+
     }//GEN-LAST:event_tabelaEmprestimoMouseClicked
 
     //Confirma o empréstimo de exemplar ao clicar ENTER.
@@ -677,31 +700,36 @@ public class Emprestimo extends javax.swing.JInternalFrame {
                 int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
                 if (input == 0) {
-                    Emprestimos emprestimo = new Emprestimos();
-                    EmprestimoDAO dao = new EmprestimoDAO();
+                    verificaEmpRepetido();
+                    if (empValido) {
+                        Emprestimos emprestimo = new Emprestimos();
+                        EmprestimoDAO dao = new EmprestimoDAO();
 
-                    emprestimo.setNumChamada(numChamada.getText());
-                    emprestimo.setUsuario(usuarioEmprestimo.getText());
-                    emprestimo.setDataEmp(dataEmprestimo.getText());
-                    emprestimo.setDataDev(dataDevolucao.getText());
-                    emprestimo.setDevolvido("");
-                    emprestimo.setSituacao(situacaoEmprestimo.getText());
-                    emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-                    emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                        emprestimo.setNumChamada(numChamada.getText());
+                        emprestimo.setUsuario(usuarioEmprestimo.getText());
+                        emprestimo.setDataEmp(dataEmprestimo.getText());
+                        emprestimo.setDataDev(dataDevolucao.getText());
+                        emprestimo.setDevolvido("");
+                        emprestimo.setSituacao(situacaoEmprestimo.getText());
+                        emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                        emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-                    dao.create(emprestimo);
+                        dao.create(emprestimo);
 
-                    alterarQtdExemplares();
+                        alterarQtdExemplares();
 
-                    numChamada.setText(null);
-                    usuarioEmprestimo.setText(null);
-                    idBook.setText(null);
-                    idUsuario.setText(null);
+                        numChamada.setText(null);
+                        usuarioEmprestimo.setText(null);
+                        idBook.setText(null);
+                        idUsuario.setText(null);
 
-                    ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-                    ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+                        ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                        ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
 
-                    readJTable();
+                        readJTable();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
                     numChamada.setText(null);
