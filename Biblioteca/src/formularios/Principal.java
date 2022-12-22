@@ -95,6 +95,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setText("Usuário");
 
         usuarioLogin.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        usuarioLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuarioLoginActionPerformed(evt);
+            }
+        });
 
         senhaLogin.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         senhaLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -225,6 +230,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void senhaLoginKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_senhaLoginKeyReleased
     }//GEN-LAST:event_senhaLoginKeyReleased
+
+    private void usuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioLoginActionPerformed
+        login();
+    }//GEN-LAST:event_usuarioLoginActionPerformed
 
     /**
      * @param args the command line arguments

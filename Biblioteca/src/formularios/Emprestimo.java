@@ -34,6 +34,7 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     private LocalDate dataDevol;
     private LocalDate hj;
     private boolean empValido;
+    private boolean atraso;
 
     public Emprestimo() {
         initComponents();
@@ -292,13 +293,38 @@ public class Emprestimo extends javax.swing.JInternalFrame {
             } else {
                 empValido = true;
             }
-            
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao verificar empréstimos ativos do Usuário:" + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return empValido;
+    }
+
+    public boolean verificaAtraso() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM tbl_emp WHERE usuario LIKE ? AND situacao LIKE ?";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, usuarioEmprestimo.getText());
+            stmt.setString(2, "Em Atraso");
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                atraso = true;
+            } else {
+                atraso = false;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar se o usuário possui empréstimos em atraso.");
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return atraso;
     }
 
     @SuppressWarnings("unchecked")
@@ -632,56 +658,61 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
-                int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            verificaAtraso();
+            if (atraso) {
+                JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário possui empréstimos em atraso");
+            } else {
+                if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
+                    int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-                if (input == 0) {
-                    verificaEmpRepetido();
-                    if (empValido) {
-                        Emprestimos emprestimo = new Emprestimos();
-                        EmprestimoDAO dao = new EmprestimoDAO();
+                    if (input == 0) {
+                        verificaEmpRepetido();
+                        if (empValido) {
+                            Emprestimos emprestimo = new Emprestimos();
+                            EmprestimoDAO dao = new EmprestimoDAO();
 
-                        emprestimo.setNumChamada(numChamada.getText());
-                        emprestimo.setUsuario(usuarioEmprestimo.getText());
-                        emprestimo.setDataEmp(dataEmprestimo.getText());
-                        emprestimo.setDataDev(dataDevolucao.getText());
-                        emprestimo.setDevolvido("");
-                        emprestimo.setSituacao(situacaoEmprestimo.getText());
-                        emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-                        emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                            emprestimo.setNumChamada(numChamada.getText());
+                            emprestimo.setUsuario(usuarioEmprestimo.getText());
+                            emprestimo.setDataEmp(dataEmprestimo.getText());
+                            emprestimo.setDataDev(dataDevolucao.getText());
+                            emprestimo.setDevolvido("");
+                            emprestimo.setSituacao(situacaoEmprestimo.getText());
+                            emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                            emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-                        dao.create(emprestimo);
+                            dao.create(emprestimo);
 
-                        alterarQtdExemplares();
+                            alterarQtdExemplares();
 
+                            numChamada.setText(null);
+                            usuarioEmprestimo.setText(null);
+                            idBook.setText(null);
+                            idUsuario.setText(null);
+
+                            ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                            ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+
+                            readJTable();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
                         numChamada.setText(null);
                         usuarioEmprestimo.setText(null);
                         idBook.setText(null);
                         idUsuario.setText(null);
-
-                        ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-                        ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
-
-                        readJTable();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
-                    numChamada.setText(null);
-                    usuarioEmprestimo.setText(null);
-                    idBook.setText(null);
-                    idUsuario.setText(null);
+                    JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
             }
         }
     }//GEN-LAST:event_confirmarEmprestimoActionPerformed
 
     //Seleciona linha da JTable.
     private void tabelaEmprestimoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEmprestimoKeyReleased
-        
+
     }//GEN-LAST:event_tabelaEmprestimoKeyReleased
 
     //Seleciona linha da JTable.
@@ -696,49 +727,54 @@ public class Emprestimo extends javax.swing.JInternalFrame {
         if ((numChamada.getText().isBlank()) || (usuarioEmprestimo.getText().isBlank())) {
             JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
         } else {
-            if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
-                int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            verificaAtraso();
+            if (atraso) {
+                JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário possui empréstimos em atraso");
+            } else {
+                if ((qtdExemp > 0) && (qtdExemp <= qtdTotExemp)) {
+                    int input = JOptionPane.showConfirmDialog(null, "Confirmar empréstimo de exemplar?", "Empréstimo", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-                if (input == 0) {
-                    verificaEmpRepetido();
-                    if (empValido) {
-                        Emprestimos emprestimo = new Emprestimos();
-                        EmprestimoDAO dao = new EmprestimoDAO();
+                    if (input == 0) {
+                        verificaEmpRepetido();
+                        if (empValido) {
+                            Emprestimos emprestimo = new Emprestimos();
+                            EmprestimoDAO dao = new EmprestimoDAO();
 
-                        emprestimo.setNumChamada(numChamada.getText());
-                        emprestimo.setUsuario(usuarioEmprestimo.getText());
-                        emprestimo.setDataEmp(dataEmprestimo.getText());
-                        emprestimo.setDataDev(dataDevolucao.getText());
-                        emprestimo.setDevolvido("");
-                        emprestimo.setSituacao(situacaoEmprestimo.getText());
-                        emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
-                        emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
+                            emprestimo.setNumChamada(numChamada.getText());
+                            emprestimo.setUsuario(usuarioEmprestimo.getText());
+                            emprestimo.setDataEmp(dataEmprestimo.getText());
+                            emprestimo.setDataDev(dataDevolucao.getText());
+                            emprestimo.setDevolvido("");
+                            emprestimo.setSituacao(situacaoEmprestimo.getText());
+                            emprestimo.setIdLivro(Integer.parseInt(idBook.getText()));
+                            emprestimo.setIdUsuario(Integer.parseInt(idUsuario.getText()));
 
-                        dao.create(emprestimo);
+                            dao.create(emprestimo);
 
-                        alterarQtdExemplares();
+                            alterarQtdExemplares();
 
+                            numChamada.setText(null);
+                            usuarioEmprestimo.setText(null);
+                            idBook.setText(null);
+                            idUsuario.setText(null);
+
+                            ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
+                            ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
+
+                            readJTable();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
                         numChamada.setText(null);
                         usuarioEmprestimo.setText(null);
                         idBook.setText(null);
                         idUsuario.setText(null);
-
-                        ((DefaultTableModel) tblChamadaEmp.getModel()).setRowCount(0);
-                        ((DefaultTableModel) tblUserEmp.getModel()).setRowCount(0);
-
-                        readJTable();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Empréstimo negado! O usuário já está em posse de um exemplar de mesmo título, autor e edição.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Empréstimo Cancelado!");
-                    numChamada.setText(null);
-                    usuarioEmprestimo.setText(null);
-                    idBook.setText(null);
-                    idUsuario.setText(null);
+                    JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível realizar o empréstimo. Verifique o número de exemplares disponíveis.");
             }
         }
     }//GEN-LAST:event_usuarioEmprestimoActionPerformed
