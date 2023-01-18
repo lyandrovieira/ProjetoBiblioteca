@@ -3,9 +3,14 @@ package formularios;
 import connection.ConnectionFactory;
 import java.sql.*;
 import java.awt.Dimension;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -28,8 +33,11 @@ public class Administradores extends javax.swing.JInternalFrame {
     private boolean existe;
     private String senhaDigitada;
     private String usuarioDigitado;
+    private String hashSenhaVerificacao;
+    private String hashSenhaRegistro;
     private String senha;
     private String confSenha;
+    private String password;
     JPasswordField pass = new JPasswordField();
     JTextField txtUser = new JTextField();
 
@@ -87,8 +95,7 @@ public class Administradores extends javax.swing.JInternalFrame {
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, usuarioDigitado);
-            stmt.setString(2, senhaDigitada);
-            //stmt.setString(2, hashSenhaVerificacao);
+            stmt.setString(2, hashSenhaVerificacao);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -100,6 +107,38 @@ public class Administradores extends javax.swing.JInternalFrame {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return autenticacao;
+    }
+
+    public String criarHashVerificacao() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        password = senhaDigitada;
+
+        MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+        byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : messageDigest) {
+            hexString.append(String.format("%02X", 0xFF & b));
+        }
+
+        hashSenhaVerificacao = hexString.toString();
+
+        return hashSenhaVerificacao;
+    }
+
+    public String criarHashRegistro() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        password = senha;
+
+        MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+        byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : messageDigest) {
+            hexString.append(String.format("%02X", 0xFF & b));
+        }
+
+        hashSenhaRegistro = hexString.toString();
+
+        return hashSenhaRegistro;
     }
 
     @SuppressWarnings("unchecked")
@@ -319,14 +358,26 @@ public class Administradores extends javax.swing.JInternalFrame {
                                 JOptionPane.OK_CANCEL_OPTION);
                         senhaDigitada = new String(pass.getPassword());
 
+                        try {
+                            criarHashVerificacao();
+                        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                            Logger.getLogger(Administradores.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                         verificarSenha();
 
                         if (autenticacao == true) {
                             Admins admin = new Admins();
                             AdminsDAO dao = new AdminsDAO();
 
+                            try {
+                                criarHashRegistro();
+                            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                                Logger.getLogger(Administradores.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
                             admin.setNome(usuarioAdmin.getText());
-                            admin.setSenha(senhaAdmin.getText());
+                            admin.setSenha(hashSenhaRegistro);
                             admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
 
                             dao.create(admin);
@@ -355,8 +406,14 @@ public class Administradores extends javax.swing.JInternalFrame {
                     Admins admin = new Admins();
                     AdminsDAO dao = new AdminsDAO();
 
+                    try {
+                        criarHashRegistro();
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                        Logger.getLogger(Administradores.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                     admin.setNome(usuarioAdmin.getText());
-                    admin.setSenha(senhaAdmin.getText());
+                    admin.setSenha(hashSenhaRegistro);
                     admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
 
                     dao.create(admin);
@@ -391,8 +448,13 @@ public class Administradores extends javax.swing.JInternalFrame {
                 JOptionPane.showConfirmDialog(null,
                         new Object[]{digSenha, pass}, "Senha",
                         JOptionPane.OK_CANCEL_OPTION);
-
                 senhaDigitada = new String(pass.getPassword());
+
+                try {
+                    criarHashVerificacao();
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                    Logger.getLogger(Administradores.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                 verificarSenha();
 
