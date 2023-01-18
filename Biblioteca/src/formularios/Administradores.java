@@ -6,10 +6,10 @@ import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Admins;
 import model.dao.AdminsDAO;
@@ -25,8 +25,13 @@ import model.dao.AdminsDAO;
 public class Administradores extends javax.swing.JInternalFrame {
 
     private boolean autenticacao;
+    private boolean existe;
     private String senhaDigitada;
+    private String usuarioDigitado;
+    private String senha;
+    private String confSenha;
     JPasswordField pass = new JPasswordField();
+    JTextField txtUser = new JTextField();
 
     public Administradores() {
         initComponents();
@@ -54,22 +59,43 @@ public class Administradores extends javax.swing.JInternalFrame {
         }
     }
 
+    public boolean existeUsuario() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM tbl_admins";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            existe = rs.next();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return existe;
+    }
+
     public boolean verificarSenha() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT senha FROM tbl_admins WHERE senha LIKE ?";
+        String sql = "SELECT * FROM tbl_admins WHERE nome LIKE ? AND senha LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, senhaDigitada);
+            stmt.setString(1, usuarioDigitado);
+            stmt.setString(2, senhaDigitada);
+            //stmt.setString(2, hashSenhaVerificacao);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 autenticacao = true;
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao validar senha de usuário: " + ex);
+            JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
@@ -268,46 +294,83 @@ public class Administradores extends javax.swing.JInternalFrame {
 
     //Salva as informações de administradores no DB.
     private void cadastrarAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarAdminActionPerformed
-        char[] senha = senhaAdmin.getPassword();
-        char[] confSenha = confirmarSenha.getPassword();
-        if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
-            JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
-        } else {
-            if (Arrays.equals(senha, confSenha)) {
-                int input = JOptionPane.showConfirmDialog(null, "Para incluir um novo Administrador, é necessário a autenticação de Administrador já cadastrado. Continuar?", "Incluir Administrador", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                if (input == 0) {
-                    JLabel digSenha = new JLabel("Digite sua senha de usuário:");
-                    JOptionPane.showConfirmDialog(null,
-                            new Object[]{digSenha, pass}, "Senha",
-                            JOptionPane.OK_CANCEL_OPTION);
+        existeUsuario();
 
-                    senhaDigitada = new String(pass.getPassword());
+        if (existe) {
+            senha = new String(senhaAdmin.getPassword());
+            JOptionPane.showMessageDialog(null, "Senha digitada: " + senha);
+            confSenha = new String(confirmarSenha.getPassword());
+            JOptionPane.showMessageDialog(null, "Conferindo a senha: " + confSenha);
+            if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
+                JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
+            } else {
+                if (senha.equals(confSenha)) {
+                    int input = JOptionPane.showConfirmDialog(null, "Para incluir um novo Administrador, é necessário a autenticação de Administrador já cadastrado. Continuar?", "Incluir Administrador", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (input == 0) {
+                        JLabel digUser = new JLabel("Digite seu nome de usuário:");
+                        JOptionPane.showConfirmDialog(null,
+                                new Object[]{digUser, txtUser}, "Usuário",
+                                JOptionPane.OK_CANCEL_OPTION);
+                        usuarioDigitado = txtUser.getText();
 
-                    verificarSenha();
+                        JLabel digSenha = new JLabel("Digite sua senha de usuário:");
+                        JOptionPane.showConfirmDialog(null,
+                                new Object[]{digSenha, pass}, "Senha",
+                                JOptionPane.OK_CANCEL_OPTION);
+                        senhaDigitada = new String(pass.getPassword());
 
-                    if (autenticacao == true) {
-                        Admins admin = new Admins();
-                        AdminsDAO dao = new AdminsDAO();
+                        verificarSenha();
 
-                        admin.setNome(usuarioAdmin.getText());
-                        admin.setSenha(senhaAdmin.getText());
-                        admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
+                        if (autenticacao == true) {
+                            Admins admin = new Admins();
+                            AdminsDAO dao = new AdminsDAO();
 
-                        dao.create(admin);
+                            admin.setNome(usuarioAdmin.getText());
+                            admin.setSenha(senhaAdmin.getText());
+                            admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
 
-                        usuarioAdmin.setText(null);
-                        senhaAdmin.setText(null);
-                        confirmarSenha.setText(null);
-                        selecionarOcupacao.setSelectedItem("Selecione");
+                            dao.create(admin);
 
-                        //JOptionPane.showMessageDialog(null, "Novo administrador cadastrado com sucesso!");
-                        readJTable();
+                            usuarioAdmin.setText(null);
+                            senhaAdmin.setText(null);
+                            confirmarSenha.setText(null);
+                            selecionarOcupacao.setSelectedItem("Selecione");
+
+                            readJTable();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Autorização inválida. Verifique os dados inseridos.");
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Autorização inválida. Verifique os dados inseridos.");
+                        JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
                     }
                 }
+            }
+        } else {
+            senha = new String(senhaAdmin.getPassword());
+            confSenha = new String(confirmarSenha.getPassword());
+            if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
+                JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
             } else {
-                JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
+                if (senha.equals(confSenha)) {
+                    Admins admin = new Admins();
+                    AdminsDAO dao = new AdminsDAO();
+
+                    admin.setNome(usuarioAdmin.getText());
+                    admin.setSenha(senhaAdmin.getText());
+                    admin.setOcupacao(selecionarOcupacao.getSelectedItem().toString());
+
+                    dao.create(admin);
+
+                    usuarioAdmin.setText(null);
+                    senhaAdmin.setText(null);
+                    confirmarSenha.setText(null);
+                    selecionarOcupacao.setSelectedItem("Selecione");
+
+                    readJTable();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes.");
+                }
             }
         }
     }//GEN-LAST:event_cadastrarAdminActionPerformed
@@ -318,6 +381,12 @@ public class Administradores extends javax.swing.JInternalFrame {
             int input = JOptionPane.showConfirmDialog(null, "Para excluir um exemplar, é necessário confirmação com senha", "Excluir Exemplar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
             if (input == 0) {
+                JLabel digUser = new JLabel("Digite seu nome de usuário:");
+                JOptionPane.showConfirmDialog(null,
+                        new Object[]{digUser, txtUser}, "Usuário",
+                        JOptionPane.OK_CANCEL_OPTION);
+                usuarioDigitado = txtUser.getText();
+
                 JLabel digSenha = new JLabel("Digite sua senha de usuário:");
                 JOptionPane.showConfirmDialog(null,
                         new Object[]{digSenha, pass}, "Senha",

@@ -265,7 +265,27 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                Connection con = ConnectionFactory.getConnection();
+                PreparedStatement stmt = null;
+                ResultSet rs = null;
+                String sql = "SELECT * FROM tbl_admins";
+
+                try {
+                    stmt = con.prepareStatement(sql);
+                    rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        new Principal().setVisible(true);
+                    } else {
+                        TelaInicial inicial = new TelaInicial();
+                        inicial.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuários: " + ex);
+                } finally {
+                    ConnectionFactory.closeConnection(con, stmt, rs);
+                }
             }
         });
     }

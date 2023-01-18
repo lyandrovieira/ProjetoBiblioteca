@@ -1,5 +1,12 @@
 package formularios;
 
+import connection.ConnectionFactory;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -10,12 +17,33 @@ package formularios;
  */
 public class TelaInicial extends javax.swing.JFrame {
 
+    private boolean existe;
+
     /**
      * Creates new form Principal
      */
     public TelaInicial() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        this.setResizable(true);
+    }
+
+    public boolean existeUsuario() {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM tbl_admins";
+
+        try {
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            existe = rs.next();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuários: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return existe;
     }
 
     /**
@@ -186,34 +214,54 @@ public class TelaInicial extends javax.swing.JFrame {
 
     //Chama a tela de cadastro de exemplar.
     private void subMenuCadExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadExemplarActionPerformed
-        CadastroExemplar cadastroexemplar = new CadastroExemplar();
-        desktoppanel.add(cadastroexemplar);
-        cadastroexemplar.setPosicao();
-        cadastroexemplar.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            CadastroExemplar cadastroexemplar = new CadastroExemplar();
+            desktoppanel.add(cadastroexemplar);
+            cadastroexemplar.setPosicao();
+            cadastroexemplar.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuCadExemplarActionPerformed
 
     //Chama a tela de consulta de acervo.
     private void subMenuConsultAcervoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultAcervoActionPerformed
-        ConsultarAcervo consultaacervo = new ConsultarAcervo();
-        desktoppanel.add(consultaacervo);
-        consultaacervo.setPosicao();
-        consultaacervo.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            ConsultarAcervo consultaacervo = new ConsultarAcervo();
+            desktoppanel.add(consultaacervo);
+            consultaacervo.setPosicao();
+            consultaacervo.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuConsultAcervoActionPerformed
 
     //Chama a tela de cadastro de usuário.
     private void subMenuCadUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadUserActionPerformed
-        CadastrarUsuarios cadusers = new CadastrarUsuarios();
-        desktoppanel.add(cadusers);
-        cadusers.setPosicao();
-        cadusers.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            CadastrarUsuarios cadusers = new CadastrarUsuarios();
+            desktoppanel.add(cadusers);
+            cadusers.setPosicao();
+            cadusers.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuCadUserActionPerformed
 
     //Chama a tela de consulta de usuário.
     private void subMenuConsultarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultarUserActionPerformed
-        UsuariosCadastrados userscad = new UsuariosCadastrados();
-        desktoppanel.add(userscad);
-        userscad.setPosicao();
-        userscad.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            UsuariosCadastrados userscad = new UsuariosCadastrados();
+            desktoppanel.add(userscad);
+            userscad.setPosicao();
+            userscad.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuConsultarUserActionPerformed
 
     ////Chama a tela de consulta de administradores.
@@ -226,26 +274,41 @@ public class TelaInicial extends javax.swing.JFrame {
 
     ////Chama a tela de empréstimo.
     private void subMenuEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuEmpActionPerformed
-        Emprestimo emp = new Emprestimo();
-        desktoppanel.add(emp);
-        emp.setPosicao();
-        emp.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            Emprestimo emp = new Emprestimo();
+            desktoppanel.add(emp);
+            emp.setPosicao();
+            emp.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuEmpActionPerformed
 
     //Chama a tela de devolução.
     private void subMenuDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuDevActionPerformed
-        Devolucao dev = new Devolucao();
-        desktoppanel.add(dev);
-        dev.setPosicao();
-        dev.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            Devolucao dev = new Devolucao();
+            desktoppanel.add(dev);
+            dev.setPosicao();
+            dev.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuDevActionPerformed
 
     //Chama a tela de consulta de empréstimo.
     private void subMenuConsultExempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuConsultExempActionPerformed
-        ConsultarEmprestimo consultempres = new ConsultarEmprestimo();
-        desktoppanel.add(consultempres);
-        consultempres.setPosicao();
-        consultempres.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            ConsultarEmprestimo consultempres = new ConsultarEmprestimo();
+            desktoppanel.add(consultempres);
+            consultempres.setPosicao();
+            consultempres.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_subMenuConsultExempActionPerformed
 
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSobreActionPerformed
@@ -262,10 +325,15 @@ public class TelaInicial extends javax.swing.JFrame {
 
     //Chama a tela de consulta de devoluções.
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        ConsultarDevolucao consultdev = new ConsultarDevolucao();
-        desktoppanel.add(consultdev);
-        consultdev.setPosicao();
-        consultdev.setVisible(true);
+        existeUsuario();
+        if (existe) {
+            ConsultarDevolucao consultdev = new ConsultarDevolucao();
+            desktoppanel.add(consultdev);
+            consultdev.setPosicao();
+            consultdev.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
