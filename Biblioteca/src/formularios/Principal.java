@@ -1,11 +1,16 @@
 package formularios;
 
 import connection.ConnectionFactory;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,6 +22,9 @@ import java.sql.SQLException;
  */
 public class Principal extends javax.swing.JFrame {
 
+    private String password;
+    private String senhaDigitada;
+    private String hashSenhaVerificacao;
     /**
      * Creates new form Principal
      */
@@ -24,6 +32,22 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
     }
 
+    public String criarHashVerificacao() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        password = senhaDigitada;
+
+        MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+        byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : messageDigest) {
+            hexString.append(String.format("%02X", 0xFF & b));
+        }
+
+        hashSenhaVerificacao = hexString.toString();
+
+        return hashSenhaVerificacao;
+    }
+    
     //Verifica se administrador está cadastrado no BD. Se estiver, é liberado o acesso à Tela Inicial.
     public void login() {
         Connection con = ConnectionFactory.getConnection();
@@ -33,9 +57,16 @@ public class Principal extends javax.swing.JFrame {
 
         try {
             stmt = con.prepareStatement(sql);
+            senhaDigitada = new String(senhaLogin.getPassword());
+            
+            try {
+                criarHashVerificacao();
+            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             stmt.setString(1, usuarioLogin.getText());
-            String capturaSenha = new String(senhaLogin.getPassword());
-            stmt.setString(2, capturaSenha);
+            stmt.setString(2, hashSenhaVerificacao);
             rs = stmt.executeQuery();
 
             if (rs.next()) {

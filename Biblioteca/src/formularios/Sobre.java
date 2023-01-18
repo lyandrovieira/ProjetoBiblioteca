@@ -50,7 +50,7 @@ public class Sobre extends javax.swing.JInternalFrame {
         jLabel1.setText("Desenvolvido por Lyandro Barbosa Vieira de Melo");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Versão 1.0");
+        jLabel2.setText("Versão 1.2");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Setembro - 2022");

@@ -27,9 +27,6 @@ public class Emprestimo extends javax.swing.JInternalFrame {
     private int idLiv;
     private int idUse;
     private int idEmp;
-    private int idPesquisado;
-    private int numeroLinhas;
-    private int linhas;
     private String dataDev;
     private LocalDate dataDevol;
     private LocalDate hj;

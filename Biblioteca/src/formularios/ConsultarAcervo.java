@@ -2,13 +2,19 @@ package formularios;
 
 import connection.ConnectionFactory;
 import java.awt.Dimension;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Acervo;
 import model.dao.AcervoDAO;
@@ -26,7 +32,11 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
 
     private boolean autenticacao;
     private String senhaDigitada;
+    private String usuarioDigitado;
+    private String password;
+    private String hashSenhaVerificacao;
     JPasswordField pass = new JPasswordField();
+    JTextField txtUser = new JTextField();
 
     public ConsultarAcervo() {
         initComponents();
@@ -152,11 +162,12 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT senha FROM tbl_admins WHERE senha LIKE ?";
+        String sql = "SELECT * FROM tbl_admins WHERE nome LIKE ? AND senha LIKE ?";
 
         try {
             stmt = con.prepareStatement(sql);
-            stmt.setString(1, senhaDigitada);
+            stmt.setString(1, usuarioDigitado);
+            stmt.setString(2, hashSenhaVerificacao);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -169,7 +180,7 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         }
         return autenticacao;
     }
-    
+
     public void pesquisaTotalExemplares() {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt1 = null;
@@ -182,14 +193,14 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         try {
             stmt1 = con.prepareStatement(sql1);
             rs1 = stmt1.executeQuery();
-            
+
             if (rs1 != null && rs1.next()) {
                 totAcervo.setText(String.valueOf(rs1.getInt(1)));
             }
-            
+
             stmt2 = con.prepareStatement(sql2);
             rs2 = stmt2.executeQuery();
-            
+
             if (rs2 != null && rs2.next()) {
                 totDisponivel.setText(String.valueOf(rs2.getInt(1)));
             }
@@ -202,6 +213,22 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
         }
     }
 
+    public String criarHashVerificacao() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        password = senhaDigitada;
+
+        MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+        byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : messageDigest) {
+            hexString.append(String.format("%02X", 0xFF & b));
+        }
+
+        hashSenhaVerificacao = hexString.toString();
+
+        return hashSenhaVerificacao;
+    }
+    
     @SuppressWarnings("unchecked")
 
     //NÃO APAGAR "private void initComponents();
@@ -362,13 +389,24 @@ public class ConsultarAcervo extends javax.swing.JInternalFrame {
             int input = JOptionPane.showConfirmDialog(null, "Para excluir um exemplar, é necessário confirmação com senha", "Excluir Exemplar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
             if (input == 0) {
+                JLabel digUser = new JLabel("Digite seu nome de usuário:");
+                JOptionPane.showConfirmDialog(null,
+                        new Object[]{digUser, txtUser}, "Usuário",
+                        JOptionPane.OK_CANCEL_OPTION);
+                usuarioDigitado = txtUser.getText();
+
                 JLabel digSenha = new JLabel("Digite sua senha de usuário:");
                 JOptionPane.showConfirmDialog(null,
                         new Object[]{digSenha, pass}, "Senha",
                         JOptionPane.OK_CANCEL_OPTION);
-
                 senhaDigitada = new String(pass.getPassword());
 
+                try {
+                    criarHashVerificacao();
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                    Logger.getLogger(ConsultarAcervo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 verificarSenha();
 
                 if (autenticacao == true) {

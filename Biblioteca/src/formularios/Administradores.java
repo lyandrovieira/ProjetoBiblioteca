@@ -1,9 +1,9 @@
 package formularios;
 
 import connection.ConnectionFactory;
-import java.sql.*;
 import java.awt.Dimension;
 import java.io.UnsupportedEncodingException;
+import java.sql.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -337,9 +337,7 @@ public class Administradores extends javax.swing.JInternalFrame {
 
         if (existe) {
             senha = new String(senhaAdmin.getPassword());
-            JOptionPane.showMessageDialog(null, "Senha digitada: " + senha);
             confSenha = new String(confirmarSenha.getPassword());
-            JOptionPane.showMessageDialog(null, "Conferindo a senha: " + confSenha);
             if ((usuarioAdmin.getText().isBlank()) || (senhaAdmin.getText().isBlank()) || (confirmarSenha.getText().isBlank()) || (selecionarOcupacao.getSelectedItem() == "Selecione")) {
                 JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
             } else {
