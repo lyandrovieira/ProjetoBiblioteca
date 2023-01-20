@@ -90,16 +90,21 @@ public class Administradores extends javax.swing.JInternalFrame {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = "SELECT * FROM tbl_admins WHERE nome LIKE ? AND senha LIKE ?";
+        String sql = "SELECT * FROM tbl_admins WHERE nome LIKE ? AND senha LIKE ? AND (ocupacao LIKE ? OR ocupacao LIKE ?)";
 
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, usuarioDigitado);
             stmt.setString(2, hashSenhaVerificacao);
+            stmt.setString(3, "Direção");
+            stmt.setString(4, "Suporte");
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 autenticacao = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Apenas usuários com nivel de autorização 'Direção' podem validar a ação solicitada.");
+                autenticacao = false;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao validar usuário: " + ex);
@@ -200,7 +205,7 @@ public class Administradores extends javax.swing.JInternalFrame {
         jLabel5.setText("Ocupação *");
 
         selecionarOcupacao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        selecionarOcupacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Professor(a)", "Administrativo" }));
+        selecionarOcupacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Professor(a)", "Administrativo", "Direção", "Suporte" }));
         selecionarOcupacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selecionarOcupacaoActionPerformed(evt);
@@ -342,7 +347,7 @@ public class Administradores extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Campo obrigatório em branco!");
             } else {
                 if (senha.equals(confSenha)) {
-                    int input = JOptionPane.showConfirmDialog(null, "Para incluir um novo Administrador, é necessário a autenticação de Administrador já cadastrado. Continuar?", "Incluir Administrador", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    int input = JOptionPane.showConfirmDialog(null, "Para incluir um novo Administrador, é necessário a autenticação de Administrador com ocupação 'Direção'. Continuar?", "Incluir Administrador", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     if (input == 0) {
                         JLabel digUser = new JLabel("Digite seu nome de usuário:");
                         JOptionPane.showConfirmDialog(null,

@@ -310,7 +310,7 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         TelaInicial inicial = new TelaInicial();
                         inicial.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário cadastrar um Adminstrador no sistema. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu.");
+                        JOptionPane.showMessageDialog(null, "Antes de prosseguir, é necessário o cadastro do Diretor e/ou Coordenador da Instituição. Para isso, acesse 'Usuários' >> 'Administradores' na barra de menu e atribua a ocupação 'Direção' junto ao nome e senha informados.");
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuários: " + ex);
